@@ -1,8 +1,8 @@
-import { invitationContent } from '../content/invitation'
-import './details-section.css'
+import { invitationContent } from "../content/invitation";
+import "./details-section.css";
 
 function DetailsSection() {
-  const { story, details, schedule, rsvp } = invitationContent
+  const { story, details, schedule, rsvp } = invitationContent;
 
   return (
     <section className="details-section">
@@ -61,7 +61,7 @@ function DetailsSection() {
         </article>
       </div>
     </section>
-  )
+  );
 }
 
-export default DetailsSection
+export default DetailsSection;

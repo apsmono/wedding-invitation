@@ -5,11 +5,12 @@
 }
 
 .gallery-section::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: -36px 0 auto;
   height: 120px;
-  background: url('/floral-divider.svg') center top / min(1200px, 100%) auto no-repeat;
+  background: url("/floral-divider.svg") center top / min(1200px, 100%) auto
+    no-repeat;
   opacity: 0.72;
   pointer-events: none;
 }
@@ -46,13 +47,13 @@
 }
 
 .gallery-section__card::after {
-  content: '';
+  content: "";
   position: absolute;
   right: 18px;
   top: 18px;
   width: 72px;
   height: 72px;
-  background: url('../assets/monogram-crest.svg') center / contain no-repeat;
+  background: url("../assets/monogram-crest.svg") center / contain no-repeat;
   opacity: 0.18;
 }
 

@@ -21,6 +21,7 @@ Use this folder when multiple AI agents or human collaborators are working in pa
 3. Keep your edits inside the claimed file scope. If the scope changes, update the board first.
 4. After a meaningful checkpoint, append a short entry to `handoffs.md`.
 5. When finished, mark the task `done` in `board.md` and leave a final handoff entry.
+6. If a branch change is needed, hold the process first. Do not switch branches while another AI task is still `in-progress` unless the board and handoffs explicitly sequence that branch work.
 
 ## Task Slice Rules
 
@@ -29,6 +30,7 @@ Use this folder when multiple AI agents or human collaborators are working in pa
 - If two tasks must touch the same file, sequence them instead of working in parallel.
 - Reserve shared files like `README.md`, `CHANGELOG.md`, and `AGENTS.md` for one owner at a time.
 - Keep roadmap feature IDs and board task IDs aligned, for example `F1-C` in both files.
+- Treat branch changes like shared-file operations: only one coordinated branch-change owner at a time, and only after active AI work is no longer in progress.
 
 ## Custom Worker Assets
 

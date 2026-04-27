@@ -9,6 +9,7 @@
 
 - Check `README.md` before changing setup or scripts.
 - Read all applicable instruction surfaces before acting: `.github/copilot-instructions.md`, `AGENTS.md`, matching `.github/instructions/*.instructions.md` files, current coordination files, the active task scope, and the nearest implementation files.
+- If a branch change is being considered, stop first and confirm that no other AI-owned task is still active. Hold the branch change until the board and handoffs show that the other AI work is finished or explicitly sequenced.
 - Record meaningful repo changes in `CHANGELOG.md`.
 - Write back after acting by updating the board, handoff log, and any workflow docs touched by the change.
 - Always write documentation for completed changes that affect behavior, setup, deployment, workflow, or content expectations.
@@ -20,6 +21,7 @@
 
 - `main` is the published branch.
 - `development` is the integration branch for ongoing work before release.
+- Do not switch branches while another AI task remains `in-progress` unless the coordination files explicitly sequence that branch work.
 - Add annotated tags at meaningful milestones so release points are easy to reference and deploy.
 
 ## Parallel AI Workflow
@@ -28,6 +30,7 @@
 - Use `.github/coordination/handoffs.md` to record progress, blockers, and next actions.
 - Use `.github/coordination/roadmap.md` to understand the active milestone and slice dependencies.
 - Read those coordination files before starting a claimed slice and update them again after finishing the slice.
+- Treat branch changes like shared-file coordination: hold the process until other active AI work is done or the board has been updated to sequence the branch operation.
 - Keep one owner per shared file at a time. If your task needs a claimed file, update the board before editing.
 - Split work by file scope whenever possible so agents can validate changes independently.
 - Read `.github/coordination/README.md` for the full protocol.

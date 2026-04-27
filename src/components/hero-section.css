@@ -22,7 +22,7 @@
 
 .hero-section__copy::before,
 .hero-section__copy::after {
-  content: '';
+  content: "";
   position: absolute;
   border-radius: var(--radius-pill);
   pointer-events: none;
@@ -33,7 +33,11 @@
   height: 320px;
   right: -84px;
   top: -110px;
-  background: radial-gradient(circle, rgba(186, 132, 95, 0.28), transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(186, 132, 95, 0.28),
+    transparent 70%
+  );
 }
 
 .hero-section__copy::after {
@@ -155,7 +159,12 @@
   width: 72px;
   height: 1px;
   margin: 18px 0;
-  background: linear-gradient(90deg, transparent, rgba(139, 94, 60, 0.45), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(139, 94, 60, 0.45),
+    transparent
+  );
 }
 
 .hero-section__card-title {
@@ -190,7 +199,7 @@
 }
 
 .hero-section__highlights li::before {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   top: 0.55em;
@@ -213,7 +222,8 @@
   .hero-section__meta {
     grid-template-columns: 1fr;
   }
-}.hero-section {
+}
+.hero-section {
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
   gap: 28px;
@@ -237,7 +247,7 @@
 
 .hero-section__copy::before,
 .hero-section__copy::after {
-  content: '';
+  content: "";
   position: absolute;
   border-radius: var(--radius-pill);
   pointer-events: none;
@@ -248,7 +258,11 @@
   height: 320px;
   right: -84px;
   top: -110px;
-  background: radial-gradient(circle, rgba(186, 132, 95, 0.28), transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(186, 132, 95, 0.28),
+    transparent 70%
+  );
 }
 
 .hero-section__copy::after {
@@ -305,7 +319,12 @@
   width: 72px;
   height: 1px;
   margin: 18px 0;
-  background: linear-gradient(90deg, transparent, rgba(139, 94, 60, 0.45), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(139, 94, 60, 0.45),
+    transparent
+  );
 }
 
 .hero-section__card-title {
@@ -330,7 +349,7 @@
 }
 
 .hero-section__highlights li::before {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   top: 0.55em;

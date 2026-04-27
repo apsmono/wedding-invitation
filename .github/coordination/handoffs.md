@@ -2,6 +2,30 @@
 
 Append new entries at the top.
 
+## 2026-04-27 23:30 | GitHub Copilot | F1-G
+
+- Status: done
+- Changed: `.github/copilot-instructions.md`, `AGENTS.md`, `README.md`, `CHANGELOG.md`, `.github/coordination/README.md`, `.github/coordination/board.md`, `.github/coordination/handoffs.md`
+- Validated: `npm run build`, `npm run lint`
+- Notes: Added an explicit coordination rule that AI workers must hold any branch change until other active AI work is finished or explicitly sequenced in the coordination files.
+- Next: Future AI workers should pause before any branch switch and check `board.md` plus recent `handoffs.md` entries first.
+
+## 2026-04-27 22:13 | GitHub Copilot | T8
+
+- Status: done
+- Changed: `src/content/invitation.ts`, `src/App.tsx`, `package.json`, `package-lock.json`, `.env.example`, `src/lib/firebase.ts`, `README.md`, `CHANGELOG.md`, `.github/coordination/board.md`, `.github/coordination/handoffs.md`
+- Validated: `npm run build`, `npm run lint`
+- Notes: Replaced the placeholder couple with Amalia Indah Palupi and Arif Eko Pramono, updated the invitation date to Monday, 1 Juni 2026, blanked unfinished venue and contact details with safe UI fallbacks, installed Firebase, and added `.env.example` plus a reusable Firebase app bootstrap module.
+- Next: Create the real Firebase project, copy the Web App config into `.env`, and wire the RSVP flow to a backend service before public launch.
+
+## 2026-04-27 23:28 | GitHub Copilot | F1-G
+
+- Status: done
+- Changed: `.github/copilot-instructions.md`, `AGENTS.md`, `README.md`, `CHANGELOG.md`, `.github/coordination/board.md`, `.github/coordination/handoffs.md`
+- Validated: `npm run build`, `npm run lint`
+- Notes: Created and pushed the `development` branch plus annotated milestone tags `v0.0.0` and `v0.1.0` after documenting the branch and tag workflow in the repository instructions.
+- Next: Leave the unrelated working tree edits in the app files for the active feature task instead of mixing them into this workflow update.
+
 ## 2026-04-27 23:24 | GitHub Copilot | F1-G
 
 - Status: done

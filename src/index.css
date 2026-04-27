@@ -37,15 +37,29 @@
   --duration-fast: 180ms;
   --duration-base: 700ms;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --sans: 'Avenir Next', 'Segoe UI', sans-serif;
-  --serif: 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+  --sans: "Avenir Next", "Segoe UI", sans-serif;
+  --serif:
+    "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
 
   font: 17px/1.65 var(--sans);
   color: var(--text-color);
   background:
-    radial-gradient(circle at top left, rgba(255, 255, 255, 0.55), transparent 35%),
-    radial-gradient(circle at 80% 10%, rgba(191, 142, 99, 0.22), transparent 24%),
-    linear-gradient(180deg, var(--background-soft) 0%, var(--background) 46%, var(--background-deep) 100%);
+    radial-gradient(
+      circle at top left,
+      rgba(255, 255, 255, 0.55),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 80% 10%,
+      rgba(191, 142, 99, 0.22),
+      transparent 24%
+    ),
+    linear-gradient(
+      180deg,
+      var(--background-soft) 0%,
+      var(--background) 46%,
+      var(--background-deep) 100%
+    );
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -69,7 +83,7 @@ body {
 }
 
 body::before {
-  content: '';
+  content: "";
   position: fixed;
   inset: 0;
   background:
@@ -85,10 +99,14 @@ body::before {
 }
 
 body::after {
-  content: '';
+  content: "";
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at center, transparent 0, rgba(89, 60, 34, 0.04) 100%);
+  background: radial-gradient(
+    circle at center,
+    transparent 0,
+    rgba(89, 60, 34, 0.04) 100%
+  );
   pointer-events: none;
   mix-blend-mode: multiply;
 }
