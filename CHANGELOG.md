@@ -21,6 +21,7 @@ All notable project changes should be recorded in this file.
 - Countdown, gallery, map and travel guidance, registry notes, and RSVP form handling.
 - Root `TODO.md` for personal follow-up reminders.
 - Git milestone tags `v0.0.0` and `v0.1.0` plus the long-lived `development` branch.
+- Firebase app bootstrap with an environment template for later backend integration.
 
 ### Changed
 
@@ -33,3 +34,5 @@ All notable project changes should be recorded in this file.
 - GitHub Pages deployment now auto-detects owner-site repositories and deploys them at `/`, while README documents exact GitHub and Cloudflare publishing clicks.
 - README now explains the guest flow, current RSVP behavior, and direct public route URLs.
 - AI workflow instructions now require reading all applicable instructions before action, always writing documentation after action, and committing then pushing each completed change.
+- AI workflow instructions now explicitly require holding any branch change until other active AI work is finished or explicitly sequenced in the coordination files.
+- Invitation content now uses Amalia Indah Palupi, Arif Eko Pramono, and Monday, 1 Juni 2026 as the seeded real details while unfinished venue and contact fields stay blank-safe in the UI.

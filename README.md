@@ -8,6 +8,14 @@ Most invitation copy, dates, venue details, route labels, gallery text, map guid
 
 Your personal follow-up reminder is tracked in `TODO.md`.
 
+The currently seeded real invitation details are:
+
+- Woman: `Amalia Indah Palupi`
+- Man: `Arif Eko Pramono`
+- Date: `Monday, 1 Juni 2026`
+
+Venue, RSVP inbox, planner contact, and other final event logistics are intentionally blank for now.
+
 ## GitHub Pages
 
 This repository is configured to deploy to GitHub Pages with GitHub Actions.
@@ -177,10 +185,11 @@ If you prefer direct uploads instead of Git integration:
 Use this repository workflow for AI-driven changes:
 
 1. Read before action: review all applicable instruction files, the active coordination files, nearby implementation files, and any instructions that apply to the slice.
-2. Change only the claimed scope.
-3. Validate the result.
-4. Write after action: update `board.md`, `handoffs.md`, and workflow docs when the change affects process or setup.
-5. Commit and push each completed change using the AI commit format.
+2. If a branch change is being considered, hold the process until other active AI work is finished or explicitly sequenced in the coordination files.
+3. Change only the claimed scope.
+4. Validate the result.
+5. Write after action: update `board.md`, `handoffs.md`, and workflow docs when the change affects process or setup.
+6. Commit and push each completed change using the AI commit format.
 
 Documentation expectation:
 Always document completed changes that affect behavior, setup, workflow, deployment, or content ownership. At minimum, update `README.md` and `CHANGELOG.md` when those surfaces are affected.
@@ -189,6 +198,7 @@ Always document completed changes that affect behavior, setup, workflow, deploym
 
 - Published branch: `main`
 - Integration branch: `development`
+- Branch changes are coordinated work. Do not switch branches while another AI task is still `in-progress` unless the coordination files explicitly allow it.
 - Milestone tags: annotated release tags on meaningful snapshots
 
 Current milestone tags:
@@ -245,6 +255,24 @@ The current RSVP form validates required fields and saves the response in browse
 - Public guests can complete the flow, but their response is only stored on their own device right now.
 - To receive centralized RSVPs, connect the form to a real service such as Formspree, Supabase, Firebase, Airtable automation, or your own API endpoint.
 
+## Firebase Setup
+
+The repository now includes a Firebase bootstrap for future RSVP or content integrations.
+
+- Environment template: `.env.example`
+- Firebase module: `src/lib/firebase.ts`
+- Installed package: `firebase`
+
+Setup flow:
+
+1. Create a Firebase project in the Firebase console.
+2. Add a Web App inside that project.
+3. Copy `.env.example` to `.env`.
+4. Fill in the `VITE_FIREBASE_*` values from the Firebase Web App config.
+5. Import `firebaseApp` or `getFirebaseApp()` from `src/lib/firebase.ts` when you are ready to connect Firestore, Auth, Storage, or another Firebase service.
+
+This bootstrap does not change runtime behavior yet. The RSVP flow is still local-only until you wire a real Firebase-backed data flow.
+
 ## Public Access
 
 The current public base URL is:
@@ -265,7 +293,7 @@ How to publish for public users:
 3. Push to `main` or run the deploy workflow.
 4. Share the final GitHub Pages URL with guests.
 
-Before sharing publicly, replace the placeholder names, date, venue, email links, and registry details in `src/content/invitation.ts`.
+Before sharing publicly, replace the remaining blank venue, RSVP inbox, planner contact, and any unfinished guest-guide or registry details in `src/content/invitation.ts`.
 
 ## Changelog Workflow
 

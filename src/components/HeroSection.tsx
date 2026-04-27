@@ -1,12 +1,15 @@
-import { invitationContent, type InvitationContent } from '../content/invitation'
-import './hero-section.css'
+import {
+  invitationContent,
+  type InvitationContent,
+} from "../content/invitation";
+import "./hero-section.css";
 
 type HeroSectionProps = {
-  content?: InvitationContent
-}
+  content?: InvitationContent;
+};
 
 function HeroSection({ content = invitationContent }: HeroSectionProps) {
-  const { couple, event, hero, invitationSummary } = content
+  const { couple, event, hero, invitationSummary } = content;
 
   return (
     <header className="hero-section">
@@ -37,20 +40,31 @@ function HeroSection({ content = invitationContent }: HeroSectionProps) {
         </dl>
 
         <div className="hero-section__actions">
-          <a className="hero-section__action hero-section__action--primary" href={hero.primaryCta.href}>
+          <a
+            className="hero-section__action hero-section__action--primary"
+            href={hero.primaryCta.href}
+          >
             {hero.primaryCta.label}
           </a>
-          <a className="hero-section__action hero-section__action--secondary" href={hero.secondaryCta.href}>
+          <a
+            className="hero-section__action hero-section__action--secondary"
+            href={hero.secondaryCta.href}
+          >
             {hero.secondaryCta.label}
           </a>
         </div>
       </div>
 
-      <aside className="hero-section__card" aria-label="Wedding invitation summary">
+      <aside
+        className="hero-section__card"
+        aria-label="Wedding invitation summary"
+      >
         <p className="hero-section__card-label">{invitationSummary.label}</p>
         <div className="hero-section__divider" />
         <p className="hero-section__card-date">{event.dateLabel}</p>
-        <h2 className="hero-section__card-title">{invitationSummary.headline}</h2>
+        <h2 className="hero-section__card-title">
+          {invitationSummary.headline}
+        </h2>
         <p className="hero-section__venue-name">{event.venue.name}</p>
         <address className="hero-section__address">
           {event.venue.addressLines.map((line) => (
@@ -65,7 +79,7 @@ function HeroSection({ content = invitationContent }: HeroSectionProps) {
         </ul>
       </aside>
     </header>
-  )
+  );
 }
 
-export default HeroSection
+export default HeroSection;
