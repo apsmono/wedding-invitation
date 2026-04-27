@@ -8,9 +8,29 @@
 ## Expected Workflow
 
 - Check `README.md` before changing setup or scripts.
+- Read the relevant context before acting: current coordination files, the active task scope, and the nearest implementation files.
 - Record meaningful repo changes in `CHANGELOG.md`.
+- Write back after acting by updating the board, handoff log, and any workflow docs touched by the change.
 - Preserve the lightweight Vite structure unless the task requires otherwise.
 - Prefer direct, minimal edits over speculative scaffolding.
+- After each completed change, create a commit with the repository AI commit format and push it to the current branch.
+
+## Parallel AI Workflow
+
+- Use `.github/coordination/board.md` to claim a task before editing project files.
+- Use `.github/coordination/handoffs.md` to record progress, blockers, and next actions.
+- Use `.github/coordination/roadmap.md` to understand the active milestone and slice dependencies.
+- Read those coordination files before starting a claimed slice and update them again after finishing the slice.
+- Keep one owner per shared file at a time. If your task needs a claimed file, update the board before editing.
+- Split work by file scope whenever possible so agents can validate changes independently.
+- Read `.github/coordination/README.md` for the full protocol.
+
+## Shared Worker Assets
+
+- `.github/agents/wedding-feature-worker.agent.md` is the reusable hidden worker for executing one claimed slice.
+- `.github/prompts/run-roadmap-slice.prompt.md` runs a single slice with the standard handoff format.
+- `.github/prompts/plan-feature-pack.prompt.md` turns a new feature into board-ready parallel slices.
+- `.github/prompts/record-handoff.prompt.md` appends a normalized handoff entry.
 
 ## Commit Message Standard
 

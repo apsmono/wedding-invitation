@@ -1,0 +1,19 @@
+# Pull Request Summary
+
+TYPE(SCOPE): SHORT SUMMARY
+
+## Files
+
+- add: path/to/new-file
+- modify: path/to/existing-file
+- remove: path/to/deleted-file
+
+## Changes
+
+- what changed
+- why it changed
+
+## Validation
+
+- [ ] `npm run build`
+- [ ] `npm run lint`
