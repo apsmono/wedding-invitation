@@ -2,6 +2,14 @@
 
 Append new entries at the top.
 
+## 2026-04-27 23:28 | GitHub Copilot | F1-G
+
+- Status: done
+- Changed: `.github/copilot-instructions.md`, `AGENTS.md`, `README.md`, `CHANGELOG.md`, `.github/coordination/board.md`, `.github/coordination/handoffs.md`
+- Validated: `npm run build`, `npm run lint`
+- Notes: Created and pushed the `development` branch plus annotated milestone tags `v0.0.0` and `v0.1.0` after documenting the branch and tag workflow in the repository instructions.
+- Next: Leave the unrelated working tree edits in the app files for the active feature task instead of mixing them into this workflow update.
+
 ## 2026-04-27 23:24 | GitHub Copilot | F1-G
 
 - Status: done
