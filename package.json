@@ -6,12 +6,15 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:root": "tsc -b && vite build --base=/",
+    "deploy:cloudflare": "npm run build:root && npx wrangler pages deploy",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
     "react": "^19.2.5",
-    "react-dom": "^19.2.5"
+    "react-dom": "^19.2.5",
+    "react-router-dom": "^7.14.2"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
