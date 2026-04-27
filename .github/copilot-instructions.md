@@ -5,9 +5,10 @@ This repository is a React + TypeScript app powered by Vite.
 ## Working Rules
 
 - Keep changes small, typed, and easy to review.
-- Read the relevant context before taking action. At minimum, review the active task claim, nearby implementation files, and any coordination notes that govern the current slice.
+- Read all applicable instructions before taking action. At minimum, review `.github/copilot-instructions.md`, `AGENTS.md`, any matching `.github/instructions/*.instructions.md` files, the active task claim, nearby implementation files, and any coordination notes that govern the current slice.
 - Prefer editing existing files over adding new abstractions.
 - Write back after taking action. Update the coordination log, task state, and any affected workflow docs before concluding work.
+- Always write documentation for completed changes. If behavior, setup, workflow, deployment, or content source expectations change, update the relevant documentation surface instead of leaving the change undocumented.
 - Update `README.md` when setup or workflow changes.
 - Update `CHANGELOG.md` for user-visible, workflow, or tooling changes.
 - After each completed change, create a commit using the repository commit format and push that commit to the current branch.
@@ -20,6 +21,11 @@ This repository is a React + TypeScript app powered by Vite.
 3. Validate the change.
 4. Write the outcome back to coordination and documentation surfaces.
 5. Commit and push the completed change.
+
+## Git Workflow
+
+- Use `main` for the published line and `development` for ongoing integration work.
+- Add annotated git tags for meaningful milestones so deployment and rollback points are explicit.
 
 ## AI Commit Format
 

@@ -8,12 +8,19 @@
 ## Expected Workflow
 
 - Check `README.md` before changing setup or scripts.
-- Read the relevant context before acting: current coordination files, the active task scope, and the nearest implementation files.
+- Read all applicable instruction surfaces before acting: `.github/copilot-instructions.md`, `AGENTS.md`, matching `.github/instructions/*.instructions.md` files, current coordination files, the active task scope, and the nearest implementation files.
 - Record meaningful repo changes in `CHANGELOG.md`.
 - Write back after acting by updating the board, handoff log, and any workflow docs touched by the change.
+- Always write documentation for completed changes that affect behavior, setup, deployment, workflow, or content expectations.
 - Preserve the lightweight Vite structure unless the task requires otherwise.
 - Prefer direct, minimal edits over speculative scaffolding.
 - After each completed change, create a commit with the repository AI commit format and push it to the current branch.
+
+## Git Branch And Tag Workflow
+
+- `main` is the published branch.
+- `development` is the integration branch for ongoing work before release.
+- Add annotated tags at meaningful milestones so release points are easy to reference and deploy.
 
 ## Parallel AI Workflow
 

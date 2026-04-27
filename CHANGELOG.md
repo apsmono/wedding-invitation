@@ -20,6 +20,7 @@ All notable project changes should be recorded in this file.
 - Multi-page invitation flow with welcome, celebration, guest guide, RSVP, and confirmation routes.
 - Countdown, gallery, map and travel guidance, registry notes, and RSVP form handling.
 - Root `TODO.md` for personal follow-up reminders.
+- Git milestone tags `v0.0.0` and `v0.1.0` plus the long-lived `development` branch.
 
 ### Changed
 
@@ -31,4 +32,4 @@ All notable project changes should be recorded in this file.
 - README now distinguishes free GitHub Pages deployment from optional paid custom-domain usage and documents a free shorter-URL workaround via `apsmono.github.io`.
 - GitHub Pages deployment now auto-detects owner-site repositories and deploys them at `/`, while README documents exact GitHub and Cloudflare publishing clicks.
 - README now explains the guest flow, current RSVP behavior, and direct public route URLs.
-- AI workflow instructions now require reading context before action, writing back after action, and committing then pushing each completed change.
+- AI workflow instructions now require reading all applicable instructions before action, always writing documentation after action, and committing then pushing each completed change.

@@ -2,6 +2,22 @@
 
 Append new entries at the top.
 
+## 2026-04-27 23:24 | GitHub Copilot | F1-G
+
+- Status: done
+- Changed: `.github/copilot-instructions.md`, `AGENTS.md`, `README.md`, `CHANGELOG.md`, `.github/coordination/board.md`, `.github/coordination/handoffs.md`
+- Validated: `npm run build`, `npm run lint`
+- Notes: Tightened the AI workflow so agents must read all applicable instruction files before acting, always document completed changes, and follow the documented branch and tag strategy.
+- Next: Create the `development` branch and the milestone tags `v0.0.0` and `v0.1.0`, then push the refs.
+
+## 2026-04-27 23:20 | GitHub Copilot | F1-G
+
+- Status: in-progress
+- Changed: `.github/copilot-instructions.md`, `AGENTS.md`, `README.md`, `CHANGELOG.md`, `.github/coordination/board.md`, `.github/coordination/handoffs.md`
+- Validated: pending `npm run build`
+- Notes: Tightening the AI workflow so agents must read all applicable instruction files before acting, always write documentation for completed changes, and document the new branch and tag strategy.
+- Next: Run `npm run build`, then create the `development` branch and milestone tags and mark the docs slice done.
+
 ## 2026-04-27 23:05 | GitHub Copilot | F2-A
 
 - Status: done

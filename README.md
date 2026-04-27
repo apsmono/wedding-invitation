@@ -176,11 +176,25 @@ If you prefer direct uploads instead of Git integration:
 
 Use this repository workflow for AI-driven changes:
 
-1. Read before action: review the active coordination files, nearby implementation files, and any instructions that apply to the slice.
+1. Read before action: review all applicable instruction files, the active coordination files, nearby implementation files, and any instructions that apply to the slice.
 2. Change only the claimed scope.
 3. Validate the result.
 4. Write after action: update `board.md`, `handoffs.md`, and workflow docs when the change affects process or setup.
 5. Commit and push each completed change using the AI commit format.
+
+Documentation expectation:
+Always document completed changes that affect behavior, setup, workflow, deployment, or content ownership. At minimum, update `README.md` and `CHANGELOG.md` when those surfaces are affected.
+
+## Git Branches And Tags
+
+- Published branch: `main`
+- Integration branch: `development`
+- Milestone tags: annotated release tags on meaningful snapshots
+
+Current milestone tags:
+
+- `v0.0.0`: initial app scaffold baseline
+- `v0.1.0`: invitation guest experience, hosting workflow, and AI coordination baseline
 
 ## AI Commit Format
 
