@@ -285,9 +285,9 @@ Setup flow:
 8. Create at least one Firebase Authentication user account that is allowed to sign in to `/#/dashboard/login`.
 9. Create a Firestore database in the same Firebase project.
 10. Add or confirm security rules for the access pattern you want:
+    - public guest writes for RSVP submissions into the `rsvps` collection
+    - authenticated admin reads and writes if you later persist dashboard edits in Firestore
 
-	- public guest writes for RSVP submissions into the `rsvps` collection
-	- authenticated admin reads and writes if you later persist dashboard edits in Firestore
 11. Import `firebaseApp`, `getFirebaseApp()`, `getFirebaseAuth()`, or `getFirebaseDb()` from `src/lib/firebase.ts` when you need the configured app, Auth instance, or Firestore instance.
 
 To finish the live RSVP backend setup:

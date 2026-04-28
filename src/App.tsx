@@ -1,5 +1,7 @@
 import {
   createContext,
+  lazy,
+  Suspense,
   type FormEvent,
   type ReactNode,
   useContext,
@@ -22,7 +24,6 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-import { DashboardLoginPage, DashboardPage } from "./components/AdminDashboard";
 import "./App.css";
 import {
   invitationContent,
@@ -44,6 +45,20 @@ import {
   getFirebaseDb,
   isFirebaseConfigured,
 } from "./lib/firebase";
+
+const loadDashboardModule = () => import("./components/AdminDashboard");
+
+const DashboardLoginPage = lazy(async () => {
+  const module = await loadDashboardModule();
+
+  return { default: module.DashboardLoginPage };
+});
+
+const DashboardPage = lazy(async () => {
+  const module = await loadDashboardModule();
+
+  return { default: module.DashboardPage };
+});
 
 type RsvpFormData = {
   guestName: string;
@@ -280,7 +295,9 @@ function WelcomePage() {
           {venueLines.length > 0 ? (
             <p>{venueLines.join(", ")}</p>
           ) : (
-            <p className="panel-note">Detail lokasi akan kami perbarui dalam waktu dekat.</p>
+            <p className="panel-note">
+              Detail lokasi akan kami perbarui dalam waktu dekat.
+            </p>
           )}
           {summaryHighlights.length > 0 ? (
             <ul className="moment-list">
@@ -746,7 +763,8 @@ function ThanksPage() {
           </div>
         ) : (
           <p className="panel-note">
-            Belum ada ringkasan konfirmasi yang tersimpan. Silakan kirim formulir terlebih dahulu.
+            Belum ada ringkasan konfirmasi yang tersimpan. Silakan kirim
+            formulir terlebih dahulu.
           </p>
         )}
 
@@ -785,9 +803,7 @@ function RequireDashboardAuth({
         <section className="panel page-span">
           <p className="section-tag">Dasbor</p>
           <h2>Memeriksa akses</h2>
-          <p className="panel-note">
-            Sedang memeriksa sesi dasbor saat ini.
-          </p>
+          <p className="panel-note">Sedang memeriksa sesi dasbor saat ini.</p>
         </section>
       </main>
     );
@@ -804,6 +820,21 @@ function RequireDashboardAuth({
   }
 
   return <>{children}</>;
+}
+
+function DashboardRouteFallback() {
+  return (
+    <main className="page-grid dashboard-page-grid">
+      <section className="panel page-span">
+        <p className="section-tag">Dasbor</p>
+        <h2>Menyiapkan halaman admin</h2>
+        <p className="panel-note">
+          Dasbor sedang dimuat terpisah agar halaman undangan publik tetap
+          ringan saat pertama dibuka.
+        </p>
+      </section>
+    </main>
+  );
 }
 
 function AppShell({
@@ -829,9 +860,7 @@ function AppShell({
       <header className="site-header panel">
         <div>
           <p className="eyebrow">
-            {isDashboardRoute
-              ? "Ruang kerja dasbor"
-              : "Undangan Publik"}
+            {isDashboardRoute ? "Ruang kerja dasbor" : "Undangan Publik"}
           </p>
           <h1 className="site-title">{content.couple.displayName}</h1>
           <p className="site-subtitle">{content.event.fullDateLabel}</p>
@@ -877,33 +906,37 @@ function AppShell({
         <Route
           path="/dashboard/login"
           element={
-            <DashboardLoginPage
-              authLoading={authLoading}
-              isFirebaseConfigured={isFirebaseConfigured}
-              user={currentUser}
-              onLogin={onDashboardLogin}
-            />
+            <Suspense fallback={<DashboardRouteFallback />}>
+              <DashboardLoginPage
+                authLoading={authLoading}
+                isFirebaseConfigured={isFirebaseConfigured}
+                user={currentUser}
+                onLogin={onDashboardLogin}
+              />
+            </Suspense>
           }
         />
         <Route
           path="/dashboard"
           element={
-            <RequireDashboardAuth
-              authLoading={authLoading}
-              currentUser={currentUser}
-            >
-              <DashboardPage
-                key={contentRevision}
-                currentContent={currentContent}
-                user={currentUser as User}
-                versions={versions}
-                onPublishContent={onPublishContent}
-                onSaveVersion={onSaveVersion}
-                onRestoreVersion={onRestoreVersion}
-                onResetContent={onResetContent}
-                onLogout={onDashboardLogout}
-              />
-            </RequireDashboardAuth>
+            <Suspense fallback={<DashboardRouteFallback />}>
+              <RequireDashboardAuth
+                authLoading={authLoading}
+                currentUser={currentUser}
+              >
+                <DashboardPage
+                  key={contentRevision}
+                  currentContent={currentContent}
+                  user={currentUser as User}
+                  versions={versions}
+                  onPublishContent={onPublishContent}
+                  onSaveVersion={onSaveVersion}
+                  onRestoreVersion={onRestoreVersion}
+                  onResetContent={onResetContent}
+                  onLogout={onDashboardLogout}
+                />
+              </RequireDashboardAuth>
+            </Suspense>
           }
         />
         <Route path="*" element={<Navigate to="/" replace />} />

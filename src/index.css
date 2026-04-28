@@ -54,11 +54,7 @@
       rgba(160, 119, 62, 0.24),
       transparent 24%
     ),
-    radial-gradient(
-      circle at 18% 88%,
-      rgba(46, 82, 59, 0.14),
-      transparent 24%
-    ),
+    radial-gradient(circle at 18% 88%, rgba(46, 82, 59, 0.14), transparent 24%),
     linear-gradient(
       180deg,
       var(--background-soft) 0%,

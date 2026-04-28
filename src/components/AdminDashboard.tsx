@@ -573,11 +573,15 @@ export function DashboardPage({
           </article>
           <article className="dashboard-status-card">
             <span>Email panitia</span>
-            <strong>{previewContent.rsvp.questionEmail || "Belum diatur"}</strong>
+            <strong>
+              {previewContent.rsvp.questionEmail || "Belum diatur"}
+            </strong>
           </article>
           <article className="dashboard-status-card">
             <span>Email RSVP</span>
-            <strong>{previewContent.rsvp.contactEmail || "Belum diatur"}</strong>
+            <strong>
+              {previewContent.rsvp.contactEmail || "Belum diatur"}
+            </strong>
           </article>
         </div>
       </section>
@@ -607,7 +611,8 @@ export function DashboardPage({
           </div>
         ) : (
           <p className="panel-note">
-            Belum ada versi tersimpan. Terapkan draf lalu simpan cadangan pertama Anda.
+            Belum ada versi tersimpan. Terapkan draf lalu simpan cadangan
+            pertama Anda.
           </p>
         )}
       </section>

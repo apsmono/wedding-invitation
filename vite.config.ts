@@ -29,4 +29,27 @@ const packageBase = process.env.npm_package_name
 export default defineConfig({
   plugins: [react()],
   base: configuredBase ?? repositoryBase ?? packageBase,
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (!id.includes("node_modules")) {
+            return;
+          }
+
+          if (id.includes("firebase")) {
+            return "firebase";
+          }
+
+          if (
+            id.includes("react-router") ||
+            id.includes("react-dom") ||
+            id.includes("react/")
+          ) {
+            return "react-vendor";
+          }
+        },
+      },
+    },
+  },
 });

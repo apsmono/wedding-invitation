@@ -2,6 +2,14 @@
 
 Append new entries at the top.
 
+## 2026-04-28 17:58 | GitHub Copilot | T14
+
+- Status: done
+- Changed: `src/App.tsx`, `src/App.css`, `src/components/AdminDashboard.tsx`, `src/content/invitation.ts`, `src/index.css`, `vite.config.ts`, `README.md`, `CHANGELOG.md`, `.github/coordination/board.md`, `.github/coordination/handoffs.md`
+- Validated: `npm run build`, `npm run lint`
+- Notes: Lazy-loaded the dashboard routes, split Firebase and React vendor code into explicit build chunks, removed the previous 500 kB Vite chunk warning, and packaged the remaining local source formatting edits into the same slice.
+- Next: Optional follow-up only if desired: trim the Firebase chunk further by deferring RSVP Firestore helpers until submission time.
+
 ## 2026-04-28 17:22 | GitHub Copilot | T10
 
 - Status: done

@@ -42,3 +42,4 @@ All notable project changes should be recorded in this file.
 - RSVP submissions now write to Firestore when Firebase is configured, with local browser fallback retained for preview use, and the public content copy no longer shows stale demo-only wording.
 - Public invitation and dashboard copy now use formal Indonesian with Islamic phrasing, while the visual theme shifts toward a green-gold Nusantara palette with a subtle Javanese touch and original ornamental artwork.
 - Firebase setup docs now list the exact required `VITE_FIREBASE_*` keys, call out the optional Analytics measurement ID, and explain the Auth plus Firestore steps needed for RSVP and dashboard use.
+- Dashboard routes now lazy-load the admin module so the public invitation bundle stays lighter on first load while the admin UI loads only when needed.

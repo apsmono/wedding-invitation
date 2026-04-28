@@ -210,7 +210,8 @@ export const invitationContent: InvitationContent = {
       {
         id: "dress-code",
         label: "Busana",
-        value: "Busana formal, sopan, dan nyaman dengan nuansa warna lembut sangat kami anjurkan.",
+        value:
+          "Busana formal, sopan, dan nyaman dengan nuansa warna lembut sangat kami anjurkan.",
       },
       {
         id: "reception",
@@ -221,7 +222,8 @@ export const invitationContent: InvitationContent = {
       {
         id: "arrival-note",
         label: "Catatan",
-        value: "Kami memohon kehadiran tamu sekitar 30 menit lebih awal agar acara dapat dimulai dengan tertib.",
+        value:
+          "Kami memohon kehadiran tamu sekitar 30 menit lebih awal agar acara dapat dimulai dengan tertib.",
       },
     ],
   },
@@ -284,7 +286,8 @@ export const invitationContent: InvitationContent = {
       {
         id: "gallery-3",
         title: "Ruang Cerita Kami",
-        caption: "Sudut sederhana tempat banyak rencana baik kami mulai dibicarakan dengan tenang.",
+        caption:
+          "Sudut sederhana tempat banyak rencana baik kami mulai dibicarakan dengan tenang.",
       },
     ],
   },
@@ -384,5 +387,6 @@ export const invitationContent: InvitationContent = {
       href: "",
     },
   },
-  footerNote: "Atas kehadiran dan doa restu panjenengan, kami haturkan terima kasih. Semoga Allah SWT membalas segala kebaikan dengan keberkahan.",
+  footerNote:
+    "Atas kehadiran dan doa restu panjenengan, kami haturkan terima kasih. Semoga Allah SWT membalas segala kebaikan dengan keberkahan.",
 };
