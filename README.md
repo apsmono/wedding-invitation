@@ -263,23 +263,47 @@ The repository now includes a Firebase bootstrap for future RSVP or content inte
 - Firebase module: `src/lib/firebase.ts`
 - Installed package: `firebase`
 
+Exact environment keys expected by `src/lib/firebase.ts`:
+
+- Required: `VITE_FIREBASE_API_KEY`
+- Required: `VITE_FIREBASE_AUTH_DOMAIN`
+- Required: `VITE_FIREBASE_PROJECT_ID`
+- Required: `VITE_FIREBASE_STORAGE_BUCKET`
+- Required: `VITE_FIREBASE_MESSAGING_SENDER_ID`
+- Required: `VITE_FIREBASE_APP_ID`
+- Optional: `VITE_FIREBASE_MEASUREMENT_ID`
+
 Setup flow:
 
 1. Create a Firebase project in the Firebase console.
 2. Add a Web App inside that project.
-3. Copy `.env.example` to `.env`.
-4. Fill in the `VITE_FIREBASE_*` values from the Firebase Web App config.
-5. Import `firebaseApp` or `getFirebaseApp()` from `src/lib/firebase.ts` when you are ready to connect Firestore, Auth, Storage, or another Firebase service.
-6. Enable `Email/Password` in `Firebase Console -> Authentication -> Sign-in method` if you want to use the dashboard login.
+3. If Analytics is enabled for the Web App, copy the optional measurement ID as well. Otherwise, leave `VITE_FIREBASE_MEASUREMENT_ID` blank.
+4. Copy `.env.example` to `.env` in the project root.
+5. Fill in the `VITE_FIREBASE_*` values from the Firebase Web App config.
+6. Restart the Vite dev server after saving `.env` so the new values are loaded.
+7. Enable `Email/Password` in `Firebase Console -> Authentication -> Sign-in method` if you want to use the dashboard login.
+8. Create at least one Firebase Authentication user account that is allowed to sign in to `/#/dashboard/login`.
+9. Create a Firestore database in the same Firebase project.
+10. Add or confirm security rules for the access pattern you want:
+
+	- public guest writes for RSVP submissions into the `rsvps` collection
+	- authenticated admin reads and writes if you later persist dashboard edits in Firestore
+11. Import `firebaseApp`, `getFirebaseApp()`, `getFirebaseAuth()`, or `getFirebaseDb()` from `src/lib/firebase.ts` when you need the configured app, Auth instance, or Firestore instance.
 
 To finish the live RSVP backend setup:
 
-1. Create a Firestore database in the same Firebase project.
-2. Create a collection named `rsvps`.
-3. Add security rules that allow the writes you want for guest submissions.
-4. Keep Email/Password auth enabled if you also want to use the dashboard login.
+1. Create a collection named `rsvps` the first time a guest submission is written, or create it manually in the Firebase console if you want to inspect it before launch.
+2. Keep Email/Password auth enabled if you also want to use the dashboard login.
+3. Test one RSVP from the public route and confirm the document appears in Firestore.
+4. Test one dashboard login from `/#/dashboard/login` before sharing the admin route with anyone else.
 
 After those steps, the public RSVP page will write real guest responses to Firestore.
+
+Current bootstrap behavior in `src/lib/firebase.ts`:
+
+- `isFirebaseConfigured` is only `true` when all required keys except the optional measurement ID are present.
+- `firebaseApp`, `firebaseAuth`, and `firebaseDb` stay `null` until the required keys are configured.
+- `getFirebaseApp()`, `getFirebaseAuth()`, and `getFirebaseDb()` throw clear setup errors if you call them before filling `.env`.
 
 ## Dashboard
 

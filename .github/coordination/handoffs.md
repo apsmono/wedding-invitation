@@ -2,6 +2,22 @@
 
 Append new entries at the top.
 
+## 2026-04-28 17:22 | GitHub Copilot | T10
+
+- Status: done
+- Changed: `.env.example`, `README.md`, `CHANGELOG.md`, `.github/coordination/board.md`, `.github/coordination/handoffs.md`
+- Validated: `npm run build`
+- Notes: Documented the exact Firebase env keys, marked the Analytics measurement ID as optional, and clarified the Firebase Auth plus Firestore setup sequence for RSVP and dashboard usage.
+- Next: `T9` is still blocked until the final venue, address, RSVP inbox, and planner contact details are available.
+
+## 2026-04-28 17:19 | GitHub Copilot | T10
+
+- Status: in-progress
+- Changed: `.env.example`, `README.md`, `CHANGELOG.md`, `.github/coordination/board.md`, `.github/coordination/handoffs.md`
+- Validated: pending `npm run build`
+- Notes: Tightening the Firebase setup docs so the env template, required keys, optional analytics key, Auth setup, and Firestore setup are explicit for the RSVP and dashboard flows.
+- Next: Run `npm run build`, then mark `T10` done if the documentation-only slice is clean.
+
 ## 2026-04-27 23:06 | GitHub Copilot | T13
 
 - Status: done
