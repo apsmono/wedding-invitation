@@ -2,6 +2,38 @@
 
 Append new entries at the top.
 
+## 2026-04-27 23:06 | GitHub Copilot | T13
+
+- Status: done
+- Changed: `src/content/invitation.ts`, `src/App.tsx`, `src/components/AdminDashboard.tsx`, `src/App.css`, `src/index.css`, `src/assets/ornament-nusantara.svg`, `src/lib/firebase.ts`, `src/lib/dashboard.ts`, `CHANGELOG.md`, `.github/coordination/board.md`, `.github/coordination/handoffs.md`
+- Validated: `npm run build`, `npm run lint`
+- Notes: Converted the public invitation and dashboard to formal Indonesian, added Islamic phrasing and a slight Javanese tone, introduced an original ornamental SVG plus a greener gold-toned Nusantara visual treatment, and kept the Firebase-backed RSVP and admin flows working after translation.
+- Next: Optional follow-up only if desired: reduce the production bundle size warning by splitting the dashboard into a separate async chunk.
+
+## 2026-04-27 22:44 | GitHub Copilot | T12
+
+- Status: done
+- Changed: `src/App.tsx`, `src/App.css`, `src/components/AdminDashboard.tsx`, `src/lib/dashboard.ts`, `src/lib/firebase.ts`, `README.md`, `CHANGELOG.md`, `.github/coordination/board.md`, `.github/coordination/handoffs.md`
+- Validated: `npm run build`, `npm run lint`
+- Notes: Added Firebase email/password dashboard login at `/#/dashboard/login`, protected dashboard access at `/#/dashboard`, local invitation content overrides for live preview, and browser-stored version snapshots with restore controls.
+- Next: Create Firebase admin user accounts, enable Email/Password auth in Firebase, and connect dashboard persistence to Firestore or another shared backend if you want dashboard changes to sync across devices.
+
+## 2026-04-27 23:59 | GitHub Copilot | T11
+
+- Status: done
+- Changed: `src/App.tsx`, `src/lib/firebase.ts`, `src/content/invitation.ts`, `README.md`, `CHANGELOG.md`, `TODO.md`, `.github/coordination/board.md`, `.github/coordination/handoffs.md`
+- Validated: `npm run build`, `npm run lint`
+- Notes: Verified the live public celebration, guest-guide, and thanks routes; wired the RSVP flow to Firestore when Firebase is configured; retained local fallback for preview mode; and removed stale placeholder wording from the public invitation copy.
+- Next: Provide the final venue name, city, full address, RSVP inbox email, planner contact email, and any map or registry details so `T9` can be completed.
+
+## 2026-04-27 23:40 | GitHub Copilot | F1-G
+
+- Status: done
+- Changed: `.github/coordination/board.md`, `.github/coordination/handoffs.md`
+- Validated: documentation review
+- Notes: Prepared the next work for other AI workers by splitting the post-`T8` follow-up into three non-overlapping tasks: final content pass (`T9`), Firebase setup/docs (`T10`), and RSVP backend wiring (`T11`).
+- Next: Another AI can claim one of `T9`, `T10`, or `T11` without conflicting file ownership; `T11` should wait until the final content shape from `T9` is stable if the backend payload depends on it.
+
 ## 2026-04-27 23:30 | GitHub Copilot | F1-G
 
 - Status: done

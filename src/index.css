@@ -1,24 +1,24 @@
 :root {
-  --background: #f5ede2;
-  --background-soft: #fbf4ea;
-  --background-deep: #e8dac7;
-  --surface: rgba(255, 251, 245, 0.9);
-  --surface-strong: rgba(255, 247, 238, 0.82);
-  --surface-raised: rgba(255, 252, 248, 0.76);
-  --surface-muted: rgba(255, 252, 248, 0.66);
-  --text-color: #544135;
-  --text-soft: #746254;
-  --heading-color: #2d211a;
-  --accent: #8b5e3c;
-  --accent-soft: #c7936c;
-  --accent-strong: #bd8760;
-  --sage-soft: rgba(121, 142, 114, 0.18);
-  --muted-strong: #8d7768;
-  --border-subtle: rgba(120, 86, 55, 0.12);
-  --border-default: rgba(120, 86, 55, 0.14);
-  --border-strong: rgba(120, 86, 55, 0.16);
-  --shadow-soft: 0 24px 60px rgba(72, 50, 33, 0.12);
-  --shadow-accent: 0 16px 32px rgba(139, 94, 60, 0.24);
+  --background: #efe2cc;
+  --background-soft: #f8f0e3;
+  --background-deep: #dcc6a4;
+  --surface: rgba(255, 251, 244, 0.92);
+  --surface-strong: rgba(251, 245, 235, 0.86);
+  --surface-raised: rgba(255, 252, 247, 0.8);
+  --surface-muted: rgba(252, 246, 239, 0.72);
+  --text-color: #4c3c2d;
+  --text-soft: #6d5b49;
+  --heading-color: #1f3529;
+  --accent: #8a5a2f;
+  --accent-soft: #c99b55;
+  --accent-strong: #9b6b3d;
+  --sage-soft: rgba(57, 94, 67, 0.16);
+  --muted-strong: #7f6a58;
+  --border-subtle: rgba(103, 75, 47, 0.12);
+  --border-default: rgba(103, 75, 47, 0.16);
+  --border-strong: rgba(103, 75, 47, 0.2);
+  --shadow-soft: 0 24px 60px rgba(55, 41, 24, 0.12);
+  --shadow-accent: 0 16px 32px rgba(107, 77, 39, 0.2);
   --blur-surface: 14px;
   --radius-panel: 32px;
   --radius-card: 28px;
@@ -37,21 +37,26 @@
   --duration-fast: 180ms;
   --duration-base: 700ms;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --sans: "Avenir Next", "Segoe UI", sans-serif;
+  --sans: "Avenir Next", "Segoe UI", "Helvetica Neue", sans-serif;
   --serif:
-    "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+    "Baskerville", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
 
   font: 17px/1.65 var(--sans);
   color: var(--text-color);
   background:
     radial-gradient(
       circle at top left,
-      rgba(255, 255, 255, 0.55),
+      rgba(255, 255, 255, 0.58),
       transparent 35%
     ),
     radial-gradient(
-      circle at 80% 10%,
-      rgba(191, 142, 99, 0.22),
+      circle at 82% 10%,
+      rgba(160, 119, 62, 0.24),
+      transparent 24%
+    ),
+    radial-gradient(
+      circle at 18% 88%,
+      rgba(46, 82, 59, 0.14),
       transparent 24%
     ),
     linear-gradient(
@@ -89,11 +94,18 @@ body::before {
   background:
     linear-gradient(130deg, rgba(255, 255, 255, 0.12), transparent 30%),
     repeating-linear-gradient(
+      45deg,
+      transparent 0,
+      transparent 26px,
+      rgba(98, 71, 44, 0.03) 26px,
+      rgba(98, 71, 44, 0.03) 28px
+    ),
+    repeating-linear-gradient(
       90deg,
       transparent 0,
       transparent 38px,
-      rgba(122, 95, 70, 0.035) 38px,
-      rgba(122, 95, 70, 0.035) 39px
+      rgba(122, 95, 70, 0.03) 38px,
+      rgba(122, 95, 70, 0.03) 39px
     );
   pointer-events: none;
 }
@@ -105,7 +117,7 @@ body::after {
   background: radial-gradient(
     circle at center,
     transparent 0,
-    rgba(89, 60, 34, 0.04) 100%
+    rgba(55, 42, 26, 0.06) 100%
   );
   pointer-events: none;
   mix-blend-mode: multiply;

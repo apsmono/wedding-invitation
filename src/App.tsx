@@ -1,4 +1,18 @@
-import { type FormEvent, useEffect, useState } from "react";
+import {
+  createContext,
+  type FormEvent,
+  type ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import {
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+  type User,
+} from "firebase/auth";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import {
   Link,
   NavLink,
@@ -8,8 +22,28 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
+import { DashboardLoginPage, DashboardPage } from "./components/AdminDashboard";
 import "./App.css";
-import { invitationContent } from "./content/invitation";
+import {
+  invitationContent,
+  type InvitationContent,
+} from "./content/invitation";
+import ornamentNusantara from "./assets/ornament-nusantara.svg";
+import {
+  clearStoredDashboardContent,
+  cloneInvitationContent,
+  DASHBOARD_MAX_VERSIONS,
+  persistDashboardContent,
+  persistDashboardVersions,
+  readStoredDashboardContent,
+  readStoredDashboardVersions,
+  type DashboardVersion,
+} from "./lib/dashboard";
+import {
+  firebaseAuth,
+  getFirebaseDb,
+  isFirebaseConfigured,
+} from "./lib/firebase";
 
 type RsvpFormData = {
   guestName: string;
@@ -23,8 +57,32 @@ type RsvpFormData = {
 
 type FormErrors = Partial<Record<keyof RsvpFormData, string>>;
 
+type RsvpSubmission = {
+  formData: RsvpFormData;
+  submissionMode: "firebase" | "local";
+};
+
+type AppShellProps = {
+  authLoading: boolean;
+  currentContent: InvitationContent;
+  currentUser: User | null;
+  contentRevision: number;
+  onDashboardLogin: (credentials: {
+    email: string;
+    password: string;
+  }) => Promise<void>;
+  onDashboardLogout: () => Promise<void>;
+  onPublishContent: (nextContent: InvitationContent) => void;
+  onResetContent: () => void;
+  onRestoreVersion: (versionId: string) => void;
+  onSaveVersion: (nextContent: InvitationContent, note: string) => void;
+  versions: DashboardVersion[];
+};
+
 const RSVP_DRAFT_KEY = "wedding-invitation.rsvp-draft";
 const RSVP_SUBMITTED_KEY = "wedding-invitation.rsvp-submitted";
+const InvitationContentContext =
+  createContext<InvitationContent>(invitationContent);
 
 const defaultRsvpForm: RsvpFormData = {
   guestName: "",
@@ -38,32 +96,36 @@ const defaultRsvpForm: RsvpFormData = {
   songRequest: "",
 };
 
-function buildRsvpMailto(details: RsvpFormData) {
-  if (!invitationContent.rsvp.contactEmail.trim()) {
+function useInvitationContent() {
+  return useContext(InvitationContentContext);
+}
+
+function buildRsvpMailto(details: RsvpFormData, content: InvitationContent) {
+  if (!content.rsvp.contactEmail.trim()) {
     return null;
   }
 
   const attendanceLabel =
-    invitationContent.rsvp.attendanceOptions.find(
+    content.rsvp.attendanceOptions.find(
       (item) => item.value === details.attendance,
     )?.label ?? details.attendance;
   const mealLabel =
-    invitationContent.rsvp.mealOptions.find(
+    content.rsvp.mealOptions.find(
       (item) => item.value === details.mealPreference,
     )?.label ?? details.mealPreference;
 
-  const subject = `Wedding RSVP - ${details.guestName}`;
+  const subject = `Konfirmasi Kehadiran - ${details.guestName}`;
   const body = [
-    `Name: ${details.guestName}`,
+    `Nama: ${details.guestName}`,
     `Email: ${details.email}`,
-    `Attendance: ${attendanceLabel}`,
-    `Guest Count: ${details.guestCount}`,
-    `Meal Preference: ${mealLabel}`,
-    `Dietary Notes: ${details.dietaryNotes || "None"}`,
-    `Song Request: ${details.songRequest || "None"}`,
+    `Kehadiran: ${attendanceLabel}`,
+    `Jumlah Tamu: ${details.guestCount}`,
+    `Pilihan Menu: ${mealLabel}`,
+    `Catatan Makanan: ${details.dietaryNotes || "Tidak ada"}`,
+    `Permintaan Lagu: ${details.songRequest || "Tidak ada"}`,
   ].join("\n");
 
-  return `mailto:${invitationContent.rsvp.contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  return `mailto:${content.rsvp.contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
 function readStoredRsvp(key: string): RsvpFormData | null {
@@ -82,6 +144,43 @@ function readStoredRsvp(key: string): RsvpFormData | null {
       ...defaultRsvpForm,
       ...(JSON.parse(raw) as Partial<RsvpFormData>),
     };
+  } catch {
+    return null;
+  }
+}
+
+function readStoredRsvpSubmission() {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  const raw = window.localStorage.getItem(RSVP_SUBMITTED_KEY);
+
+  if (!raw) {
+    return null;
+  }
+
+  try {
+    const parsed = JSON.parse(raw) as RsvpSubmission | Partial<RsvpFormData>;
+
+    if ("formData" in parsed && parsed.formData) {
+      return {
+        formData: {
+          ...defaultRsvpForm,
+          ...parsed.formData,
+        },
+        submissionMode:
+          parsed.submissionMode === "firebase" ? "firebase" : "local",
+      } satisfies RsvpSubmission;
+    }
+
+    return {
+      formData: {
+        ...defaultRsvpForm,
+        ...(parsed as Partial<RsvpFormData>),
+      },
+      submissionMode: "local",
+    } satisfies RsvpSubmission;
   } catch {
     return null;
   }
@@ -109,10 +208,17 @@ function useCountdownParts(targetIso: string) {
   };
 }
 
-function currentStepLabel(pathname: string) {
+function currentStepLabel(pathname: string, content: InvitationContent) {
+  if (pathname === "/dashboard") {
+    return "Dasbor";
+  }
+
+  if (pathname === "/dashboard/login") {
+    return "Masuk Dasbor";
+  }
+
   return (
-    invitationContent.navigation.find((item) => item.to === pathname)?.label ??
-    "Welcome"
+    content.navigation.find((item) => item.to === pathname)?.label ?? "Beranda"
   );
 }
 
@@ -126,55 +232,55 @@ function CountdownCell({ label, value }: { label: string; value: number }) {
 }
 
 function WelcomePage() {
-  const countdown = useCountdownParts(invitationContent.event.isoDate);
+  const content = useInvitationContent();
+  const countdown = useCountdownParts(content.event.isoDate);
   const venueLines = [
-    invitationContent.event.venue.name,
-    ...invitationContent.event.venue.addressLines,
+    content.event.venue.name,
+    ...content.event.venue.addressLines,
   ].filter(Boolean);
-  const summaryHighlights = invitationContent.invitationSummary.highlights.filter(
-    Boolean,
-  );
+  const summaryHighlights =
+    content.invitationSummary.highlights.filter(Boolean);
   const summaryHeadline =
-    invitationContent.invitationSummary.headline || "Details coming soon";
+    content.invitationSummary.headline || "Detail acara akan segera diperbarui";
 
   return (
     <main className="page-grid">
       <section className="hero-layout page-span">
         <div className="hero-panel panel">
-          <p className="eyebrow">{invitationContent.hero.eyebrow}</p>
+          <p className="eyebrow">{content.hero.eyebrow}</p>
+          <img
+            className="hero-ornament"
+            src={ornamentNusantara}
+            alt="Ornamen geometris bernuansa Nusantara dan islami"
+          />
           <h2 className="hero-heading">
-            {invitationContent.couple.partnerOne.first}{" "}
-            <span>{invitationContent.hero.titleAccent}</span>{" "}
-            {invitationContent.couple.partnerTwo.first}
+            {content.couple.partnerOne.first}{" "}
+            <span>{content.hero.titleAccent}</span>{" "}
+            {content.couple.partnerTwo.first}
           </h2>
-          <p className="lede">{invitationContent.hero.lede}</p>
+          <p className="lede">{content.hero.lede}</p>
           <div className="hero-actions">
-            <Link
-              className="primary-action"
-              to={invitationContent.hero.primaryCta.href}
-            >
-              {invitationContent.hero.primaryCta.label}
+            <Link className="primary-action" to={content.hero.primaryCta.href}>
+              {content.hero.primaryCta.label}
             </Link>
             <Link
               className="secondary-action"
-              to={invitationContent.hero.secondaryCta.href}
+              to={content.hero.secondaryCta.href}
             >
-              {invitationContent.hero.secondaryCta.label}
+              {content.hero.secondaryCta.label}
             </Link>
           </div>
         </div>
 
         <aside className="invitation-card panel">
-          <p className="card-label">
-            {invitationContent.invitationSummary.label}
-          </p>
+          <p className="card-label">{content.invitationSummary.label}</p>
           <div className="card-divider"></div>
-          <p className="card-date">{invitationContent.event.dateLabel}</p>
+          <p className="card-date">{content.event.dateLabel}</p>
           <h3>{summaryHeadline}</h3>
           {venueLines.length > 0 ? (
             <p>{venueLines.join(", ")}</p>
           ) : (
-            <p className="panel-note">Venue details will be added soon.</p>
+            <p className="panel-note">Detail lokasi akan kami perbarui dalam waktu dekat.</p>
           )}
           {summaryHighlights.length > 0 ? (
             <ul className="moment-list">
@@ -187,34 +293,36 @@ function WelcomePage() {
       </section>
 
       <section className="panel countdown-panel">
-        <p className="section-tag">{invitationContent.countdown.sectionTag}</p>
-        <h2>{invitationContent.countdown.title}</h2>
-        <p>{invitationContent.countdown.body}</p>
+        <p className="section-tag">{content.countdown.sectionTag}</p>
+        <h2>{content.countdown.title}</h2>
+        <p>{content.countdown.body}</p>
         <div className="countdown-grid">
-          <CountdownCell label="Days" value={countdown.days} />
-          <CountdownCell label="Hours" value={countdown.hours} />
-          <CountdownCell label="Minutes" value={countdown.minutes} />
-          <CountdownCell label="Seconds" value={countdown.seconds} />
+          <CountdownCell label="Hari" value={countdown.days} />
+          <CountdownCell label="Jam" value={countdown.hours} />
+          <CountdownCell label="Menit" value={countdown.minutes} />
+          <CountdownCell label="Detik" value={countdown.seconds} />
         </div>
       </section>
 
       <section className="panel story-panel">
-        <p className="section-tag">{invitationContent.story.sectionTag}</p>
-        <h2>{invitationContent.story.title}</h2>
-        <p>{invitationContent.story.body}</p>
+        <p className="section-tag">{content.story.sectionTag}</p>
+        <h2>{content.story.title}</h2>
+        <p>{content.story.body}</p>
       </section>
     </main>
   );
 }
 
 function CelebrationPage() {
+  const content = useInvitationContent();
+
   return (
     <main className="page-grid">
       <section className="panel details-panel">
-        <p className="section-tag">{invitationContent.details.sectionTag}</p>
-        <h2>{invitationContent.details.title}</h2>
+        <p className="section-tag">{content.details.sectionTag}</p>
+        <h2>{content.details.title}</h2>
         <div className="detail-grid">
-          {invitationContent.details.items.map((item) => (
+          {content.details.items.map((item) => (
             <article key={item.id}>
               <span>{item.label}</span>
               <strong>{item.value}</strong>
@@ -224,10 +332,10 @@ function CelebrationPage() {
       </section>
 
       <section className="panel schedule-panel">
-        <p className="section-tag">{invitationContent.schedule.sectionTag}</p>
-        <h2>{invitationContent.schedule.title}</h2>
+        <p className="section-tag">{content.schedule.sectionTag}</p>
+        <h2>{content.schedule.title}</h2>
         <ol className="schedule-list">
-          {invitationContent.schedule.items.map((item) => (
+          {content.schedule.items.map((item) => (
             <li key={item.id}>
               <p className="schedule-time">{item.time}</p>
               <div>
@@ -240,11 +348,11 @@ function CelebrationPage() {
       </section>
 
       <section className="panel gallery-panel page-span">
-        <p className="section-tag">{invitationContent.gallery.sectionTag}</p>
-        <h2>{invitationContent.gallery.title}</h2>
-        <p>{invitationContent.gallery.body}</p>
+        <p className="section-tag">{content.gallery.sectionTag}</p>
+        <h2>{content.gallery.title}</h2>
+        <p>{content.gallery.body}</p>
         <div className="gallery-grid">
-          {invitationContent.gallery.items.map((item) => (
+          {content.gallery.items.map((item) => (
             <article key={item.id} className="gallery-card">
               <div className="gallery-swatch" aria-hidden="true"></div>
               <h3>{item.title}</h3>
@@ -258,36 +366,36 @@ function CelebrationPage() {
 }
 
 function GuestGuidePage() {
+  const content = useInvitationContent();
   const hasVenueDetails = Boolean(
-    invitationContent.event.venue.name.trim() ||
-      invitationContent.event.venue.city.trim(),
+    content.event.venue.name.trim() || content.event.venue.city.trim(),
   );
   const mapHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-    `${invitationContent.event.venue.name} ${invitationContent.event.venue.city}`,
+    `${content.event.venue.name} ${content.event.venue.city}`,
   )}`;
 
   return (
     <main className="page-grid">
       <section className="panel map-panel page-span">
-        <p className="section-tag">{invitationContent.guestGuide.sectionTag}</p>
-        <h2>{invitationContent.guestGuide.title}</h2>
-        <p>{invitationContent.guestGuide.body}</p>
-        {hasVenueDetails && invitationContent.guestGuide.mapLabel ? (
+        <p className="section-tag">{content.guestGuide.sectionTag}</p>
+        <h2>{content.guestGuide.title}</h2>
+        <p>{content.guestGuide.body}</p>
+        {hasVenueDetails && content.guestGuide.mapLabel ? (
           <a
             className="primary-action inline-action"
             href={mapHref}
             target="_blank"
             rel="noreferrer"
           >
-            {invitationContent.guestGuide.mapLabel}
+            {content.guestGuide.mapLabel}
           </a>
         ) : (
           <p className="panel-note">
-            Map link will be added after the venue is confirmed.
+            Tautan peta akan kami tambahkan setelah lokasi dipastikan.
           </p>
         )}
         <div className="guide-grid">
-          {invitationContent.guestGuide.groups.map((group) => (
+          {content.guestGuide.groups.map((group) => (
             <article key={group.title}>
               <h3>{group.title}</h3>
               <ul className="guide-list">
@@ -301,11 +409,11 @@ function GuestGuidePage() {
       </section>
 
       <section className="panel registry-panel">
-        <p className="section-tag">{invitationContent.registry.sectionTag}</p>
-        <h2>{invitationContent.registry.title}</h2>
-        <p>{invitationContent.registry.body}</p>
+        <p className="section-tag">{content.registry.sectionTag}</p>
+        <h2>{content.registry.title}</h2>
+        <p>{content.registry.body}</p>
         <div className="registry-grid">
-          {invitationContent.registry.items.map((item) => (
+          {content.registry.items.map((item) => (
             <article key={item.id}>
               <h3>{item.label}</h3>
               <p>{item.description}</p>
@@ -315,21 +423,23 @@ function GuestGuidePage() {
       </section>
 
       <section className="panel contact-panel">
-        <p className="section-tag">Support</p>
-        <h2>Need help before the event?</h2>
+        <p className="section-tag">Bantuan</p>
+        <h2>Memerlukan bantuan sebelum hari acara?</h2>
         <p>
-          Questions about the venue, dress code, or RSVP updates can be sent to
-          the planning inbox below.
+          Pertanyaan mengenai lokasi, busana, atau pembaruan konfirmasi dapat
+          disampaikan melalui kontak panitia berikut.
         </p>
-        {invitationContent.rsvp.questionEmail.trim() ? (
+        {content.rsvp.questionEmail.trim() ? (
           <a
             className="secondary-action inline-action"
-            href={`mailto:${invitationContent.rsvp.questionEmail}?subject=Wedding%20Questions`}
+            href={`mailto:${content.rsvp.questionEmail}?subject=Pertanyaan%20Undangan`}
           >
-            Email The Planner
+            Hubungi Panitia
           </a>
         ) : (
-          <p className="panel-note">Planner contact details will be added later.</p>
+          <p className="panel-note">
+            Kontak panitia akan kami tambahkan kemudian.
+          </p>
         )}
       </section>
     </main>
@@ -337,32 +447,35 @@ function GuestGuidePage() {
 }
 
 function RsvpPage() {
+  const content = useInvitationContent();
   const navigate = useNavigate();
-  const hasQuestionEmail = Boolean(invitationContent.rsvp.questionEmail.trim());
+  const hasQuestionEmail = Boolean(content.rsvp.questionEmail.trim());
   const [formData, setFormData] = useState<RsvpFormData>(() => {
     return readStoredRsvp(RSVP_DRAFT_KEY) ?? defaultRsvpForm;
   });
   const [errors, setErrors] = useState<FormErrors>({});
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     window.localStorage.setItem(RSVP_DRAFT_KEY, JSON.stringify(formData));
   }, [formData]);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const nextErrors: FormErrors = {};
 
     if (!formData.guestName.trim()) {
-      nextErrors.guestName = "Please enter your full name.";
+      nextErrors.guestName = "Mohon isi nama lengkap Anda.";
     }
 
     if (!formData.email.trim() || !formData.email.includes("@")) {
-      nextErrors.email = "Please enter a valid email address.";
+      nextErrors.email = "Mohon isi alamat email yang valid.";
     }
 
     if (!formData.attendance) {
-      nextErrors.attendance = "Please choose an attendance option.";
+      nextErrors.attendance = "Mohon pilih konfirmasi kehadiran.";
     }
 
     if (Object.keys(nextErrors).length > 0) {
@@ -378,25 +491,60 @@ function RsvpPage() {
           : formData.guestCount,
     };
 
-    window.localStorage.setItem(RSVP_SUBMITTED_KEY, JSON.stringify(normalized));
     setErrors({});
-    navigate("/thanks", { state: normalized });
+    setSubmissionError(null);
+    setIsSubmitting(true);
+
+    let submissionMode: RsvpSubmission["submissionMode"] = "local";
+
+    try {
+      if (isFirebaseConfigured) {
+        await addDoc(collection(getFirebaseDb(), "rsvps"), {
+          ...normalized,
+          couple: content.couple.displayName,
+          eventDate: content.event.fullDateLabel,
+          createdAt: serverTimestamp(),
+        });
+        submissionMode = "firebase";
+      }
+
+      const storedSubmission: RsvpSubmission = {
+        formData: normalized,
+        submissionMode,
+      };
+
+      window.localStorage.setItem(
+        RSVP_SUBMITTED_KEY,
+        JSON.stringify(storedSubmission),
+      );
+      navigate("/thanks", { state: storedSubmission });
+    } catch (error) {
+      console.error(error);
+      setSubmissionError(
+        "Konfirmasi belum dapat dikirim ke daftar tamu bersama. Silakan selesaikan pengaturan Firebase pada .env dan Firestore, lalu coba kembali.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
     <main className="page-grid">
       <section className="panel rsvp-panel page-span">
-        <p className="section-tag">{invitationContent.rsvp.sectionTag}</p>
-        <h2>{invitationContent.rsvp.title}</h2>
-        {invitationContent.rsvp.deadlineLabel ? (
-          <p className="panel-note">{invitationContent.rsvp.deadlineLabel}</p>
+        <p className="section-tag">{content.rsvp.sectionTag}</p>
+        <h2>{content.rsvp.title}</h2>
+        {content.rsvp.deadlineLabel ? (
+          <p className="panel-note">{content.rsvp.deadlineLabel}</p>
         ) : null}
-        <p>{invitationContent.rsvp.body}</p>
-        <p className="panel-note">{invitationContent.rsvp.formNote}</p>
+        <p>{content.rsvp.body}</p>
+        <p className="panel-note">{content.rsvp.formNote}</p>
+        {submissionError ? (
+          <p className="panel-note">{submissionError}</p>
+        ) : null}
 
         <form className="rsvp-form" onSubmit={handleSubmit} noValidate>
           <label>
-            <span>Guest Name</span>
+            <span>Nama Tamu</span>
             <input
               type="text"
               value={formData.guestName}
@@ -408,7 +556,7 @@ function RsvpPage() {
           </label>
 
           <label>
-            <span>Email Address</span>
+            <span>Alamat Email</span>
             <input
               type="email"
               value={formData.email}
@@ -420,7 +568,7 @@ function RsvpPage() {
           </label>
 
           <label>
-            <span>Attendance</span>
+            <span>Kehadiran</span>
             <select
               value={formData.attendance}
               onChange={(event) =>
@@ -434,7 +582,7 @@ function RsvpPage() {
                 })
               }
             >
-              {invitationContent.rsvp.attendanceOptions.map((option) => (
+              {content.rsvp.attendanceOptions.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
                 </option>
@@ -443,7 +591,7 @@ function RsvpPage() {
           </label>
 
           <label>
-            <span>Guest Count</span>
+            <span>Jumlah Tamu</span>
             <select
               value={formData.guestCount}
               disabled={formData.attendance === "regretfully-declines"}
@@ -459,14 +607,14 @@ function RsvpPage() {
           </label>
 
           <label>
-            <span>Meal Preference</span>
+            <span>Pilihan Menu</span>
             <select
               value={formData.mealPreference}
               onChange={(event) =>
                 setFormData({ ...formData, mealPreference: event.target.value })
               }
             >
-              {invitationContent.rsvp.mealOptions.map((option) => (
+              {content.rsvp.mealOptions.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
                 </option>
@@ -475,7 +623,7 @@ function RsvpPage() {
           </label>
 
           <label className="field-span">
-            <span>Dietary Notes</span>
+            <span>Catatan Makanan</span>
             <textarea
               rows={4}
               value={formData.dietaryNotes}
@@ -486,7 +634,7 @@ function RsvpPage() {
           </label>
 
           <label>
-            <span>Song Request</span>
+            <span>Permintaan Lagu</span>
             <input
               type="text"
               value={formData.songRequest}
@@ -497,24 +645,28 @@ function RsvpPage() {
           </label>
 
           <label>
-            <span>Contact Host</span>
+            <span>Kontak Penerima RSVP</span>
             <input
               type="text"
-              value={invitationContent.rsvp.contactEmail || "Not set yet"}
+              value={content.rsvp.contactEmail || "Belum diatur"}
               readOnly
             />
           </label>
 
           <div className="form-actions field-span">
-            <button className="primary-action button-reset" type="submit">
-              Continue To Confirmation
+            <button
+              className="primary-action button-reset"
+              type="submit"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Mengirim konfirmasi..." : "Lanjut ke Ringkasan"}
             </button>
             {hasQuestionEmail ? (
               <a
                 className="secondary-action"
-                href={`mailto:${invitationContent.rsvp.questionEmail}?subject=Wedding%20Questions`}
+                href={`mailto:${content.rsvp.questionEmail}?subject=Pertanyaan%20Undangan`}
               >
-                Ask A Question
+                Ajukan Pertanyaan
               </a>
             ) : null}
           </div>
@@ -525,34 +677,38 @@ function RsvpPage() {
 }
 
 function ThanksPage() {
+  const content = useInvitationContent();
   const location = useLocation();
-  const details =
-    (location.state as RsvpFormData | null) ??
-    readStoredRsvp(RSVP_SUBMITTED_KEY);
-  const submissionHref = details ? buildRsvpMailto(details) : null;
+  const submission =
+    (location.state as RsvpSubmission | null) ?? readStoredRsvpSubmission();
+  const details = submission?.formData ?? null;
+  const submissionHref =
+    submission?.submissionMode === "local" && details
+      ? buildRsvpMailto(details, content)
+      : null;
 
   return (
     <main className="page-grid">
       <section className="panel thanks-panel page-span">
-        <p className="section-tag">Confirmation</p>
-        <h2>Thank you for responding</h2>
+        <p className="section-tag">Ringkasan</p>
+        <h2>Terima kasih atas konfirmasinya</h2>
         <p>
-          Your RSVP summary has been saved on this device for review. Connect
-          the form to a central RSVP service before going live if you want guest
-          responses collected in one place.
+          {submission?.submissionMode === "firebase"
+            ? "Konfirmasi kehadiran Anda telah dikirim ke daftar tamu bersama dan juga tersimpan di perangkat ini untuk ditinjau kembali."
+            : "Ringkasan konfirmasi Anda telah tersimpan di perangkat ini. Hubungkan formulir ke layanan RSVP terpusat sebelum undangan dipublikasikan agar data tamu terkumpul di satu tempat."}
         </p>
 
         {submissionHref ? (
           <p className="panel-note">
-            Demo handoff: use the generated email below to send this RSVP
-            summary to {invitationContent.rsvp.contactEmail}.
+            Mode demo: gunakan email otomatis berikut untuk mengirim ringkasan
+            konfirmasi ke {content.rsvp.contactEmail}.
           </p>
         ) : null}
 
         {details ? (
           <div className="summary-grid">
             <article>
-              <span>Name</span>
+              <span>Nama</span>
               <strong>{details.guestName}</strong>
             </article>
             <article>
@@ -560,51 +716,51 @@ function ThanksPage() {
               <strong>{details.email}</strong>
             </article>
             <article>
-              <span>Attendance</span>
+              <span>Kehadiran</span>
               <strong>
                 {
-                  invitationContent.rsvp.attendanceOptions.find(
+                  content.rsvp.attendanceOptions.find(
                     (item) => item.value === details.attendance,
                   )?.label
                 }
               </strong>
             </article>
             <article>
-              <span>Guest Count</span>
+              <span>Jumlah Tamu</span>
               <strong>{details.guestCount}</strong>
             </article>
             <article>
-              <span>Meal</span>
+              <span>Menu</span>
               <strong>
                 {
-                  invitationContent.rsvp.mealOptions.find(
+                  content.rsvp.mealOptions.find(
                     (item) => item.value === details.mealPreference,
                   )?.label
                 }
               </strong>
             </article>
             <article>
-              <span>Dietary Notes</span>
-              <strong>{details.dietaryNotes || "None added"}</strong>
+              <span>Catatan Makanan</span>
+              <strong>{details.dietaryNotes || "Tidak ada catatan"}</strong>
             </article>
           </div>
         ) : (
           <p className="panel-note">
-            No RSVP summary is saved yet. Submit the form first.
+            Belum ada ringkasan konfirmasi yang tersimpan. Silakan kirim formulir terlebih dahulu.
           </p>
         )}
 
         <div className="hero-actions">
           {submissionHref ? (
             <a className="primary-action" href={submissionHref}>
-              Send RSVP Email
+              Kirim Email Konfirmasi
             </a>
           ) : null}
           <Link className="primary-action" to="/guest-guide">
-            Continue To Guest Guide
+            Lanjut ke Panduan Tamu
           </Link>
           <Link className="secondary-action" to="/rsvp">
-            Edit RSVP
+            Ubah Konfirmasi
           </Link>
         </div>
       </section>
@@ -612,37 +768,103 @@ function ThanksPage() {
   );
 }
 
-function AppShell() {
+function RequireDashboardAuth({
+  authLoading,
+  children,
+  currentUser,
+}: {
+  authLoading: boolean;
+  children: ReactNode;
+  currentUser: User | null;
+}) {
   const location = useLocation();
+
+  if (authLoading) {
+    return (
+      <main className="page-grid dashboard-page-grid">
+        <section className="panel page-span">
+          <p className="section-tag">Dasbor</p>
+          <h2>Memeriksa akses</h2>
+          <p className="panel-note">
+            Sedang memeriksa sesi dasbor saat ini.
+          </p>
+        </section>
+      </main>
+    );
+  }
+
+  if (!currentUser) {
+    return (
+      <Navigate
+        to="/dashboard/login"
+        replace
+        state={{ from: location.pathname }}
+      />
+    );
+  }
+
+  return <>{children}</>;
+}
+
+function AppShell({
+  authLoading,
+  contentRevision,
+  currentContent,
+  currentUser,
+  onDashboardLogin,
+  onDashboardLogout,
+  onPublishContent,
+  onResetContent,
+  onRestoreVersion,
+  onSaveVersion,
+  versions,
+}: AppShellProps) {
+  const content = useInvitationContent();
+  const location = useLocation();
+  const dashboardEntryPath = currentUser ? "/dashboard" : "/dashboard/login";
+  const isDashboardRoute = location.pathname.startsWith("/dashboard");
 
   return (
     <div className="page-shell">
       <header className="site-header panel">
         <div>
-          <p className="eyebrow">Public Invitation Flow</p>
-          <h1 className="site-title">{invitationContent.couple.displayName}</h1>
-          <p className="site-subtitle">
-            {invitationContent.event.fullDateLabel}
+          <p className="eyebrow">
+            {isDashboardRoute
+              ? "Ruang kerja dasbor"
+              : "Undangan Publik"}
           </p>
+          <h1 className="site-title">{content.couple.displayName}</h1>
+          <p className="site-subtitle">{content.event.fullDateLabel}</p>
         </div>
 
-        <nav className="site-nav" aria-label="Invitation pages">
-          {invitationContent.navigation.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.to === "/"}
-              className={({ isActive }) =>
-                isActive ? "nav-link nav-link-active" : "nav-link"
-              }
-            >
-              {item.label}
-            </NavLink>
-          ))}
-        </nav>
+        <div className="site-header-actions">
+          <img
+            className="site-ornament"
+            src={ornamentNusantara}
+            alt="Ornamen batik geometris bernuansa islami"
+          />
+          <nav className="site-nav" aria-label="Halaman undangan">
+            {content.navigation.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.to === "/"}
+                className={({ isActive }) =>
+                  isActive ? "nav-link nav-link-active" : "nav-link"
+                }
+              >
+                {item.label}
+              </NavLink>
+            ))}
+          </nav>
+
+          <Link className="secondary-action" to={dashboardEntryPath}>
+            {currentUser ? "Buka Dasbor" : "Masuk Dasbor"}
+          </Link>
+        </div>
 
         <p className="route-indicator">
-          Current step: {currentStepLabel(location.pathname)}
+          Halaman saat ini: {currentStepLabel(location.pathname, content)}
         </p>
       </header>
 
@@ -652,14 +874,154 @@ function AppShell() {
         <Route path="/guest-guide" element={<GuestGuidePage />} />
         <Route path="/rsvp" element={<RsvpPage />} />
         <Route path="/thanks" element={<ThanksPage />} />
+        <Route
+          path="/dashboard/login"
+          element={
+            <DashboardLoginPage
+              authLoading={authLoading}
+              isFirebaseConfigured={isFirebaseConfigured}
+              user={currentUser}
+              onLogin={onDashboardLogin}
+            />
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <RequireDashboardAuth
+              authLoading={authLoading}
+              currentUser={currentUser}
+            >
+              <DashboardPage
+                key={contentRevision}
+                currentContent={currentContent}
+                user={currentUser as User}
+                versions={versions}
+                onPublishContent={onPublishContent}
+                onSaveVersion={onSaveVersion}
+                onRestoreVersion={onRestoreVersion}
+                onResetContent={onResetContent}
+                onLogout={onDashboardLogout}
+              />
+            </RequireDashboardAuth>
+          }
+        />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 
-      <footer className="footer-note">{invitationContent.footerNote}</footer>
+      <footer className="footer-note">{content.footerNote}</footer>
     </div>
   );
 }
 
 export default function App() {
-  return <AppShell />;
+  const [currentContent, setCurrentContent] = useState<InvitationContent>(
+    () => {
+      const storedContent = readStoredDashboardContent();
+
+      return storedContent ?? cloneInvitationContent(invitationContent);
+    },
+  );
+  const [versions, setVersions] = useState<DashboardVersion[]>(() =>
+    readStoredDashboardVersions(),
+  );
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [authLoading, setAuthLoading] = useState(() => Boolean(firebaseAuth));
+  const [contentRevision, setContentRevision] = useState(0);
+
+  useEffect(() => {
+    if (!firebaseAuth) {
+      return;
+    }
+
+    return onAuthStateChanged(firebaseAuth, (nextUser) => {
+      setCurrentUser(nextUser);
+      setAuthLoading(false);
+    });
+  }, []);
+
+  function handlePublishContent(nextContent: InvitationContent) {
+    const normalized = cloneInvitationContent(nextContent);
+
+    setCurrentContent(normalized);
+    setContentRevision((currentValue) => currentValue + 1);
+    persistDashboardContent(normalized);
+  }
+
+  function handleSaveVersion(nextContent: InvitationContent, note: string) {
+    const snapshot: DashboardVersion = {
+      id: `${Date.now()}`,
+      createdAt: new Date().toISOString(),
+      note: note.trim() || `Draf ${versions.length + 1}`,
+      content: cloneInvitationContent(nextContent),
+    };
+    const nextVersions = [snapshot, ...versions].slice(
+      0,
+      DASHBOARD_MAX_VERSIONS,
+    );
+
+    setVersions(nextVersions);
+    persistDashboardVersions(nextVersions);
+  }
+
+  function handleRestoreVersion(versionId: string) {
+    const nextVersion = versions.find((version) => version.id === versionId);
+
+    if (!nextVersion) {
+      return;
+    }
+
+    handlePublishContent(nextVersion.content);
+  }
+
+  function handleResetContent() {
+    const resetContent = cloneInvitationContent(invitationContent);
+
+    clearStoredDashboardContent();
+    setCurrentContent(resetContent);
+    setContentRevision((currentValue) => currentValue + 1);
+  }
+
+  async function handleDashboardLogin(credentials: {
+    email: string;
+    password: string;
+  }) {
+    if (!firebaseAuth) {
+      throw new Error(
+        "Firebase Auth belum siap digunakan. Tambahkan terlebih dahulu nilai proyek Firebase Anda ke .env.",
+      );
+    }
+
+    await signInWithEmailAndPassword(
+      firebaseAuth,
+      credentials.email,
+      credentials.password,
+    );
+  }
+
+  async function handleDashboardLogout() {
+    if (!firebaseAuth) {
+      return;
+    }
+
+    await signOut(firebaseAuth);
+  }
+
+  return (
+    <InvitationContentContext.Provider value={currentContent}>
+      <AppShell
+        authLoading={authLoading}
+        contentRevision={contentRevision}
+        currentContent={currentContent}
+        currentUser={currentUser}
+        onDashboardLogin={handleDashboardLogin}
+        onDashboardLogout={handleDashboardLogout}
+        onPublishContent={handlePublishContent}
+        onResetContent={handleResetContent}
+        onRestoreVersion={handleRestoreVersion}
+        onSaveVersion={handleSaveVersion}
+        versions={versions}
+      />
+    </InvitationContentContext.Provider>
+  );
 }

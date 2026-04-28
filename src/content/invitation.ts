@@ -138,19 +138,19 @@ export type InvitationContent = {
 export const invitationContent: InvitationContent = {
   navigation: [
     {
-      label: "Welcome",
+      label: "Beranda",
       to: "/",
     },
     {
-      label: "Celebration",
+      label: "Rangkaian Acara",
       to: "/celebration",
     },
     {
-      label: "Guest Guide",
+      label: "Panduan Tamu",
       to: "/guest-guide",
     },
     {
-      label: "RSVP",
+      label: "Konfirmasi Kehadiran",
       to: "/rsvp",
     },
   ],
@@ -167,9 +167,9 @@ export const invitationContent: InvitationContent = {
   },
   event: {
     isoDate: "2026-06-01T00:00:00+07:00",
-    dayLabel: "Monday",
+    dayLabel: "Senin",
     dateLabel: "1 Juni 2026",
-    fullDateLabel: "Monday, 1 Juni 2026",
+    fullDateLabel: "Senin, 1 Juni 2026",
     venue: {
       name: "",
       city: "",
@@ -177,207 +177,212 @@ export const invitationContent: InvitationContent = {
     },
   },
   hero: {
-    eyebrow: "Monday, 1 Juni 2026",
+    eyebrow: "Senin, 1 Juni 2026 · InsyaAllah",
     titleAccent: "&",
-    lede: "We are inviting you to a candlelit evening of vows, dinner, and dancing beneath the trees. Your presence will make the celebration complete.",
+    lede: "Dengan memohon rahmat dan ridha Allah SWT, kami bermaksud mengundang Bapak/Ibu/Saudara/i untuk hadir pada hari bahagia kami. Kehadiran serta doa restu panjenengan akan menjadi kebahagiaan yang sangat kami syukuri.",
     primaryCta: {
-      label: "RSVP Now",
+      label: "Isi Konfirmasi",
       href: "/rsvp",
     },
     secondaryCta: {
-      label: "View Celebration",
+      label: "Lihat Acara",
       href: "/celebration",
     },
   },
   invitationSummary: {
-    label: "The Invitation",
-    headline: "",
-    highlights: [],
+    label: "Undangan",
+    headline: "Dengan memohon rahmat dan ridha Allah SWT",
+    highlights: [
+      "Akad dan rangkaian syukuran akan diselenggarakan secara khidmat bersama keluarga terdekat.",
+      "Jamuan hangat, silaturahmi, serta kebersamaan sederhana akan mengiringi acara kami.",
+      "Busana sopan dan anggun bernuansa lembut sangat kami harapkan.",
+    ],
   },
   story: {
-    sectionTag: "Our Story",
-    title: "From coffee dates to forever",
-    body: "After years of shared playlists, midnight ramen, and flights taken just to spend one more day together, we are ready for our next chapter. We wanted the day to feel warm, thoughtful, and deeply personal, just like the life we are building.",
+    sectionTag: "Kisah Kami",
+    title: "Langkah kecil menuju ikatan yang diridhai",
+    body: "Dengan izin Allah SWT, perjalanan kami bertumbuh dari pertemuan-pertemuan sederhana menjadi niat yang semakin mantap untuk melangkah bersama. Kami berharap hari pernikahan ini terasa teduh, hangat, dan penuh adab, sebagaimana rumah tangga yang ingin kami bangun kelak.",
   },
   details: {
-    sectionTag: "Details",
-    title: "What to expect",
+    sectionTag: "Informasi",
+    title: "Hal yang perlu diketahui",
     items: [
       {
         id: "dress-code",
-        label: "Dress Code",
-        value: "Formal, romantic, and comfortable for an outdoor evening.",
+        label: "Busana",
+        value: "Busana formal, sopan, dan nyaman dengan nuansa warna lembut sangat kami anjurkan.",
       },
       {
         id: "reception",
-        label: "Reception",
+        label: "Ramah Tamah",
         value:
-          "Seated dinner, live band, signature cocktails, and late sweets.",
+          "Jamuan sederhana, silaturahmi keluarga, dan suasana hangat akan menemani rangkaian acara.",
       },
       {
         id: "arrival-note",
-        label: "Notes",
-        value: "Please arrive 30 minutes early for the ceremony processional.",
+        label: "Catatan",
+        value: "Kami memohon kehadiran tamu sekitar 30 menit lebih awal agar acara dapat dimulai dengan tertib.",
       },
     ],
   },
   countdown: {
-    sectionTag: "Countdown",
-    title: "The celebration is getting close",
-    body: "Use this page as your guest hub before the event. The countdown, guide, and RSVP flow are designed to make the invitation shareable as a public link.",
+    sectionTag: "Hitung Mundur",
+    title: "Menuju hari yang kami nantikan",
+    body: "Halaman ini kami siapkan sebagai pusat informasi bagi para tamu. Hitung mundur, panduan acara, dan formulir konfirmasi dapat dibagikan melalui tautan undangan ini.",
   },
   schedule: {
-    sectionTag: "Timeline",
-    title: "An evening designed to linger",
+    sectionTag: "Susunan Acara",
+    title: "Rangkaian acara InsyaAllah",
     items: [
       {
         id: "guest-arrival",
         time: "3:30 PM",
-        title: "Guests Arrive",
+        title: "Kedatangan Tamu",
         detail:
-          "Garden courtyard reception with welcome drinks and a string trio.",
+          "Penerimaan tamu dan penyambutan keluarga dimulai dengan suasana yang tenang dan tertata.",
       },
       {
         id: "ceremony",
         time: "4:30 PM",
-        title: "Vows Under The Canopy",
+        title: "Akad dan Doa Bersama",
         detail:
-          "An intimate ceremony surrounded by family, friends, and sunset light.",
+          "Momen inti acara akan dilangsungkan secara khidmat bersama keluarga, kerabat, dan sahabat terdekat.",
       },
       {
         id: "dinner",
         time: "6:00 PM",
-        title: "Dinner & Toasts",
+        title: "Jamuan dan Silaturahmi",
         detail:
-          "Seasonal dinner service followed by stories, speeches, and dessert.",
+          "Setelah prosesi utama, tamu dipersilakan menikmati jamuan sambil bersilaturahmi bersama keluarga besar.",
       },
       {
         id: "dance-floor",
         time: "8:00 PM",
-        title: "Lantern Dance Floor",
-        detail: "Live band, late-night sweets, and dancing into the evening.",
+        title: "Penutup Acara",
+        detail:
+          "Acara ditutup dengan suasana santai, ucapan syukur, dan kebersamaan yang hangat.",
       },
     ],
   },
   gallery: {
-    sectionTag: "Gallery",
-    title: "Snapshots from our story",
-    body: "These cards are placeholders for the photos and captions you want guests to see before the wedding day.",
+    sectionTag: "Galeri",
+    title: "Jejak perjalanan kami",
+    body: "Beberapa kenangan yang kami simpan sebagai penanda perjalanan menuju hari pernikahan kami.",
     items: [
       {
         id: "gallery-1",
-        title: "First Trip Together",
+        title: "Langkah Pertama Bersama",
         caption:
-          "A weekend drive that turned into the tradition we never stopped repeating.",
+          "Perjalanan sederhana yang kemudian menjadi kebiasaan manis yang selalu kami rindukan.",
       },
       {
         id: "gallery-2",
-        title: "The Proposal",
+        title: "Niat yang Dimantapkan",
         caption:
-          "At golden hour, with a notebook full of promises and a very obvious smile.",
+          "Sebuah momen yang menguatkan niat, disertai doa dan harapan untuk masa depan yang baik.",
       },
       {
         id: "gallery-3",
-        title: "Our Favorite Table",
-        caption: "The quiet corner where most of our best plans somehow began.",
+        title: "Ruang Cerita Kami",
+        caption: "Sudut sederhana tempat banyak rencana baik kami mulai dibicarakan dengan tenang.",
       },
     ],
   },
   guestGuide: {
-    sectionTag: "Guest Guide",
-    title: "Travel, timing, and finding the venue",
-    body: "Everything a guest needs for the weekend lives here. Replace the placeholder guidance with your final map, hotel, and transport information.",
+    sectionTag: "Panduan Tamu",
+    title: "Panduan kehadiran dan informasi lokasi",
+    body: "Seluruh informasi yang dibutuhkan tamu sebelum hari acara akan kami rangkum di sini. Detail lokasi, perjalanan, dan akomodasi dapat diperbarui begitu susunan akhir telah dipastikan.",
     mapLabel: "",
     groups: [
       {
-        title: "Arrival",
+        title: "Kedatangan",
         items: [
-          "Plan to arrive 30 minutes before the ceremony begins.",
-          "Parking and drop-off will be available near the glasshouse entrance.",
+          "Kami mohon tamu hadir sekitar 30 menit sebelum acara dimulai.",
+          "Informasi area parkir dan titik turun tamu akan dibagikan setelah detail venue final ditetapkan.",
         ],
       },
       {
-        title: "Stay Nearby",
+        title: "Akomodasi",
         items: [
-          "Reserve accommodation near central Ubud for the easiest ride to the venue.",
-          "Share hotel recommendations here for out-of-town guests.",
+          "Silakan memilih penginapan di sekitar area venue setelah lokasi diumumkan secara resmi.",
+          "Rekomendasi hotel atau penginapan keluarga dapat kami tambahkan untuk tamu dari luar kota.",
         ],
       },
       {
-        title: "Transport",
+        title: "Transportasi",
         items: [
-          "Coordinate a return shuttle or rideshare suggestion for the late evening.",
-          "Add any dress, weather, or footwear notes guests should know before arriving.",
+          "Mohon menyiapkan transportasi pulang atau layanan perjalanan daring sesuai kebutuhan masing-masing.",
+          "Catatan cuaca, alas kaki, atau kebutuhan khusus lainnya akan kami perbarui setelah lokasi dipastikan.",
         ],
       },
     ],
   },
   registry: {
-    sectionTag: "Gift Registry",
-    title: "If you would like to give a gift",
-    body: "This section is optional. Keep it simple, or replace these cards with your final registry links and notes.",
+    sectionTag: "Doa dan Tanda Kasih",
+    title: "Kehadiran dan doa restu sudah sangat berarti",
+    body: "Bagi kami, kehadiran dan doa restu Bapak/Ibu/Saudara/i merupakan anugerah yang paling berharga. Apabila berkenan memberikan tanda kasih, keterangan berikut dapat menjadi panduan.",
     items: [
       {
         id: "registry-home",
-        label: "Home Fund",
+        label: "Dana Rumah Tangga",
         description:
-          "A place for future-home contributions once you add the final public link.",
+          "Pilihan sederhana untuk mendukung awal rumah tangga yang sedang kami rintis bersama.",
       },
       {
         id: "registry-honeymoon",
-        label: "Honeymoon Experiences",
+        label: "Perjalanan Syukur",
         description:
-          "Swap this text for a travel registry or experience-based gift option.",
+          "Pilihan tanda kasih yang dapat mendukung perjalanan pertama kami sebagai suami dan istri.",
       },
       {
         id: "registry-note",
-        label: "Warm Note",
+        label: "Titip Doa",
         description:
-          "A heartfelt message can sit here if you prefer no registry at all.",
+          "Doa tulus dan pesan baik dari panjenengan akan selalu kami simpan dengan penuh syukur.",
       },
     ],
   },
   rsvp: {
-    sectionTag: "RSVP",
-    title: "Celebrate with us",
+    sectionTag: "Konfirmasi Kehadiran",
+    title: "Mohon konfirmasi kehadiran",
     deadlineLabel: "",
-    body: "Please reply before 1 August 2026. This version includes a client-side RSVP form for guest flow review and a generated email handoff you can replace with a real backend later.",
+    body: "Kami memohon kesediaan Bapak/Ibu/Saudara/i untuk mengisi konfirmasi kehadiran melalui formulir berikut. Setelah Firebase dan Firestore terhubung, data akan otomatis masuk ke daftar tamu bersama.",
     formNote:
-      "Current behavior: the form validates input and stores it in the browser for demo purposes. For production guest collection, connect it to Formspree, Supabase, Airtable, or your own API.",
+      "Apabila Firebase belum dikonfigurasi, data konfirmasi tetap akan tersimpan di perangkat ini agar alur undangan dapat ditinjau terlebih dahulu.",
     contactEmail: "",
     questionEmail: "",
     attendanceOptions: [
       {
         value: "joyfully-accepts",
-        label: "Joyfully accepts",
+        label: "InsyaAllah hadir",
       },
       {
         value: "regretfully-declines",
-        label: "Regretfully declines",
+        label: "Dengan hormat berhalangan hadir",
       },
     ],
     mealOptions: [
       {
         value: "chef-selection",
-        label: "Chef selection",
+        label: "Menu pilihan panitia",
       },
       {
         value: "vegetarian",
-        label: "Vegetarian",
+        label: "Menu vegetarian",
       },
       {
         value: "vegan",
-        label: "Vegan",
+        label: "Menu vegan",
       },
     ],
     primaryCta: {
-      label: "Send RSVP",
+      label: "Kirim Konfirmasi",
       href: "/rsvp",
     },
     secondaryCta: {
-      label: "Ask A Question",
+      label: "Sampaikan Pertanyaan",
       href: "",
     },
   },
-  footerNote: "With love, gratitude, and a seat saved just for you.",
+  footerNote: "Atas kehadiran dan doa restu panjenengan, kami haturkan terima kasih. Semoga Allah SWT membalas segala kebaikan dengan keberkahan.",
 };

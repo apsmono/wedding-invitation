@@ -51,6 +51,21 @@
   gap: 10px;
 }
 
+.site-header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.site-ornament {
+  width: clamp(132px, 16vw, 188px);
+  height: auto;
+  opacity: 0.94;
+  filter: drop-shadow(0 12px 18px rgba(64, 47, 26, 0.12));
+}
+
 .nav-link,
 .primary-action,
 .secondary-action {
@@ -130,6 +145,12 @@
   overflow: hidden;
 }
 
+.hero-ornament {
+  width: min(210px, 48%);
+  margin: 14px 0 10px;
+  opacity: 0.92;
+}
+
 .hero-panel::before,
 .hero-panel::after {
   content: "";
@@ -171,6 +192,7 @@
 .hero-heading span {
   color: var(--accent);
   font-style: italic;
+  font-weight: 500;
 }
 
 .eyebrow,
@@ -214,6 +236,19 @@
 
 .invitation-card {
   animation: drift 8s ease-in-out infinite;
+  position: relative;
+}
+
+.invitation-card::after {
+  content: "mugi pinaringan berkah";
+  position: absolute;
+  right: 26px;
+  bottom: 20px;
+  font-family: var(--serif);
+  font-size: 0.92rem;
+  letter-spacing: 0.08em;
+  color: rgba(62, 91, 64, 0.56);
+  text-transform: lowercase;
 }
 
 .card-divider {
@@ -341,8 +376,25 @@
   border-radius: 18px;
   margin-bottom: 16px;
   background:
-    linear-gradient(130deg, rgba(255, 255, 255, 0.18), transparent 45%),
-    linear-gradient(135deg, rgba(139, 94, 60, 0.75), rgba(199, 147, 108, 0.6));
+    radial-gradient(circle at 24% 24%, rgba(255, 248, 236, 0.35), transparent 26%),
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 233, 201, 0.08) 0,
+      rgba(255, 233, 201, 0.08) 12px,
+      transparent 12px,
+      transparent 24px
+    ),
+    linear-gradient(135deg, rgba(50, 92, 65, 0.82), rgba(175, 130, 67, 0.72));
+  position: relative;
+  overflow: hidden;
+}
+
+.gallery-swatch::after {
+  content: "";
+  position: absolute;
+  inset: 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 241, 224, 0.35);
 }
 
 .inline-action {
@@ -374,7 +426,11 @@
 
 .rsvp-form input,
 .rsvp-form select,
-.rsvp-form textarea {
+.rsvp-form textarea,
+.dashboard-login-form input,
+.dashboard-form-grid input,
+.dashboard-form-grid textarea,
+.dashboard-version-note input {
   width: 100%;
   padding: 14px 16px;
   border-radius: 18px;
@@ -397,11 +453,95 @@
   gap: 8px;
 }
 
+.dashboard-page-grid {
+  align-items: start;
+}
+
+.dashboard-auth-panel,
+.dashboard-overview {
+  display: grid;
+  gap: 20px;
+}
+
+.dashboard-login-form,
+.dashboard-form-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.dashboard-form-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.dashboard-login-form label,
+.dashboard-form-grid label,
+.dashboard-version-note {
+  display: grid;
+  gap: 10px;
+}
+
+.dashboard-field-span {
+  grid-column: span 2;
+}
+
+.dashboard-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.dashboard-meta-grid,
+.dashboard-preview-list,
+.dashboard-version-list {
+  display: grid;
+  gap: 18px;
+}
+
+.dashboard-meta-grid,
+.dashboard-preview-list {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.dashboard-status-card,
+.dashboard-version-item {
+  padding: 18px 20px;
+  border-radius: 20px;
+  background: rgba(255, 252, 248, 0.66);
+  border: 1px solid rgba(120, 86, 55, 0.12);
+}
+
+.dashboard-status-card {
+  display: grid;
+  gap: 8px;
+}
+
+.dashboard-status-card span,
+.dashboard-version-note span {
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.74rem;
+  color: var(--muted-strong);
+}
+
+.dashboard-version-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.dashboard-error {
+  color: #a14e42;
+  margin: 0;
+}
+
 .footer-note {
   padding: 28px 0 0;
   text-align: center;
   color: var(--muted-strong);
   font-size: 0.95rem;
+  max-width: 56rem;
+  margin: 0 auto;
 }
 
 @keyframes fade-up {
@@ -440,7 +580,10 @@
   .registry-grid,
   .guide-grid,
   .summary-grid,
-  .rsvp-form {
+  .rsvp-form,
+  .dashboard-form-grid,
+  .dashboard-meta-grid,
+  .dashboard-preview-list {
     grid-template-columns: 1fr;
   }
 
@@ -449,7 +592,8 @@
   }
 
   .page-span,
-  .field-span {
+  .field-span,
+  .dashboard-field-span {
     grid-column: auto;
   }
 
@@ -467,8 +611,18 @@
 
   .hero-actions,
   .form-actions,
-  .site-nav {
+  .site-nav,
+  .site-header-actions,
+  .dashboard-toolbar,
+  .dashboard-version-item {
     flex-direction: column;
+    align-items: stretch;
+  }
+
+  .site-ornament,
+  .hero-ornament {
+    width: min(100%, 220px);
+    margin-inline: auto;
   }
 
   .nav-link,

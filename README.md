@@ -249,11 +249,11 @@ Guest journey:
 
 ## RSVP Handling
 
-The current RSVP form validates required fields and saves the response in browser `localStorage`.
+The RSVP form now validates required fields and submits to Firestore when Firebase is configured.
 
-- This is enough for preview and demo use.
-- Public guests can complete the flow, but their response is only stored on their own device right now.
-- To receive centralized RSVPs, connect the form to a real service such as Formspree, Supabase, Firebase, Airtable automation, or your own API endpoint.
+- When Firebase and Firestore are ready, guest submissions are written to the `rsvps` collection.
+- If Firebase is not configured yet, the form falls back to browser `localStorage` so the guest flow still works for preview and review.
+- The confirmation page reflects whether the latest submission reached Firestore or only the local fallback.
 
 ## Firebase Setup
 
@@ -270,8 +270,36 @@ Setup flow:
 3. Copy `.env.example` to `.env`.
 4. Fill in the `VITE_FIREBASE_*` values from the Firebase Web App config.
 5. Import `firebaseApp` or `getFirebaseApp()` from `src/lib/firebase.ts` when you are ready to connect Firestore, Auth, Storage, or another Firebase service.
+6. Enable `Email/Password` in `Firebase Console -> Authentication -> Sign-in method` if you want to use the dashboard login.
 
-This bootstrap does not change runtime behavior yet. The RSVP flow is still local-only until you wire a real Firebase-backed data flow.
+To finish the live RSVP backend setup:
+
+1. Create a Firestore database in the same Firebase project.
+2. Create a collection named `rsvps`.
+3. Add security rules that allow the writes you want for guest submissions.
+4. Keep Email/Password auth enabled if you also want to use the dashboard login.
+
+After those steps, the public RSVP page will write real guest responses to Firestore.
+
+## Dashboard
+
+The app now includes an admin dashboard with login and local version snapshots.
+
+- Login route: `/#/dashboard/login`
+- Protected route: `/#/dashboard`
+- Auth method: Firebase Authentication with Email/Password sign-in
+
+Current dashboard capabilities:
+
+- Sign in with a Firebase-authenticated admin account
+- Edit key invitation details such as names, dates, hero copy, venue fields, planner email, RSVP inbox, and footer note
+- Apply those edits to the live local preview immediately
+- Save version snapshots in the current browser and restore an earlier snapshot later
+
+Current limitation:
+
+- Dashboard edits and version history are stored in the current browser only
+- They are not shared across devices until you connect the dashboard to a backend such as Firestore
 
 ## Public Access
 
@@ -294,6 +322,8 @@ How to publish for public users:
 4. Share the final GitHub Pages URL with guests.
 
 Before sharing publicly, replace the remaining blank venue, RSVP inbox, planner contact, and any unfinished guest-guide or registry details in `src/content/invitation.ts`.
+
+Before using the dashboard in production, create the Firebase admin user accounts you want to allow and connect the dashboard persistence to a shared database.
 
 ## Changelog Workflow
 
