@@ -16,8 +16,6 @@ import { GallerySection } from '@/components/sections/GallerySection';
 import { LocationSection } from '@/components/sections/LocationSection';
 import { RsvpSection } from '@/components/sections/RsvpSection';
 import { ThanksSection } from '@/components/sections/ThanksSection';
-import { GiftSection } from '@/components/sections/GiftSection';
-
 function App() {
   const { setGuestName, isOpened } = useInvitationStore();
 
@@ -48,7 +46,6 @@ function App() {
             <LocationSection />
             <RsvpSection />
             <ThanksSection />
-            <GiftSection />
           </main>
           <Footer />
           <MusicPlayer />

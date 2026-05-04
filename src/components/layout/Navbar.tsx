@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useScrollSpy } from '@/hooks/useScrollSpy';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { cn } from '@/lib/utils';
-import { BRIDE_NAME, GROOM_NAME } from '@/lib/constants';
+import { BRIDE_NICKNAME, GROOM_NICKNAME } from '@/lib/constants';
 import { Menu, X } from 'lucide-react';
 
 const navLinks = [
@@ -13,10 +13,9 @@ const navLinks = [
   { href: '#galeri', label: 'Galeri' },
   { href: '#lokasi', label: 'Lokasi' },
   { href: '#rsvp', label: 'Konfirmasi' },
-  { href: '#hadiah', label: 'Hadiah' },
 ] as const;
 
-const sectionIds = ['beranda', 'ayatsuci', 'acara', 'kisah', 'galeri', 'lokasi', 'rsvp', 'hadiah'];
+const sectionIds = ['beranda', 'ayatsuci', 'acara', 'kisah', 'galeri', 'lokasi', 'rsvp'];
 
 export function Navbar() {
   const { isOpened } = useInvitationStore();
@@ -42,7 +41,7 @@ export function Navbar() {
     >
       <div className="container-main flex items-center justify-between h-16">
         <a href="#beranda" className="font-serif font-semibold text-[1.05rem] text-green-800 truncate max-w-[11rem] sm:max-w-none">
-          {GROOM_NAME} &amp; {BRIDE_NAME}
+          {GROOM_NICKNAME} &amp; {BRIDE_NICKNAME}
         </a>
 
         <ul className="hidden lg:flex items-center gap-3 list-none flex-wrap justify-end max-w-[52%] 2xl:max-w-none">

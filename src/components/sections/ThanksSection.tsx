@@ -50,9 +50,6 @@ export function ThanksSection() {
             </p>
 
             <div className="flex flex-wrap gap-4">
-              <Button href="#hadiah" variant="secondary">
-                Lanjut ke Kirim Hadiah
-              </Button>
               <Button variant="secondary" onClick={resetRsvp}>
                 Ubah Konfirmasi
               </Button>

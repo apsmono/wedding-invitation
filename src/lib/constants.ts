@@ -95,81 +95,75 @@ export const AYAT_TRANSLATION =
 
 // --- Gallery (replace with your photos under public/images/gallery/) ---------
 
+/**
+ * Foto di `public/images/gallery/`. Urutan: sesi busana adat (studio) → lamaran
+ * (backdrop) → bersama keluarga. Sampul undangan pakai `COVER_IMAGE_SRC` (bukan di sini).
+ */
 export const galleryImages = [
   {
-    src: withBase('/images/gallery/IMG_2355.JPG'),
-    alt: 'Momen pre-wedding Arif dan Amalia',
-    caption: 'Perjalanan sederhana yang menjadi cerita indah menuju hari ini.',
-  },
-  {
-    src: withBase('/images/gallery/IMG_2356.JPG'),
-    alt: 'Potret kebersamaan Arif dan Amalia',
-    caption: 'Setiap langkah kecil kami penuh doa dan harapan yang baik.',
-  },
-  {
-    src: withBase('/images/gallery/IMG_2358.JPG'),
-    alt: 'Jejak pre-wedding Arif dan Amalia',
-    caption: 'Ruang penuh tawa yang kini kami kenang bersama keluarga besar.',
-  },
-  {
-    src: withBase('/images/gallery/IMG_2362.JPG'),
-    alt: 'Momen pre-wedding Arif dan Amalia',
-    caption: 'Jejak cerita kami, satu langkah lebih dekat menuju hari bahagia.',
-  },
-  {
     src: withBase('/images/gallery/IMG_2363.JPG'),
-    alt: 'Potret kebersamaan Arif dan Amalia',
-    caption: 'Kebersamaan ini tumbuh dari doa-doa yang sama.',
+    alt: 'Amalia berkebaya dan jarik batik parang, potret studio adat Jawa',
+    caption: 'Warisan lembut yang kami bawa: kebaya, jarik, dan rasa syukur yang sama.',
   },
   {
     src: withBase('/images/gallery/IMG_2364.JPG'),
-    alt: 'Jejak pre-wedding Arif dan Amalia',
-    caption: 'Setiap tatap menjadi pengingat untuk saling menjaga.',
-  },
-  {
-    src: withBase('/images/gallery/IMG_2366.JPG'),
-    alt: 'Momen pre-wedding Arif dan Amalia',
-    caption: 'Cerita sederhana kami bertumbuh dengan rasa syukur.',
-  },
-  {
-    src: withBase('/images/gallery/IMG_2367.JPG'),
-    alt: 'Potret kebersamaan Arif dan Amalia',
-    caption: 'Dalam langkah ini, kami belajar saling menguatkan.',
-  },
-  {
-    src: withBase('/images/gallery/IMG_2369.JPG'),
-    alt: 'Jejak pre-wedding Arif dan Amalia',
-    caption: 'Momen kecil yang menjadi kenangan besar.',
-  },
-  {
-    src: withBase('/images/gallery/IMG_2371.JPG'),
-    alt: 'Momen pre-wedding Arif dan Amalia',
-    caption: 'Semoga perjalanan ini selalu dipenuhi keberkahan.',
-  },
-  {
-    src: withBase('/images/gallery/IMG_2373.JPG'),
-    alt: 'Potret kebersamaan Arif dan Amalia',
-    caption: 'Kami menata hari depan dengan hati yang tenang.',
-  },
-  {
-    src: withBase('/images/gallery/IMG_2375.JPG'),
-    alt: 'Jejak pre-wedding Arif dan Amalia',
-    caption: 'Langkah kami sederhana, niat kami sama: ibadah bersama.',
+    alt: 'Arif berbeskap memegang keris, potret studio adat Jawa',
+    caption: 'Beskap, batik, dan keris—simbol adab yang ingin kami jaga bersama.',
   },
   {
     src: withBase('/images/gallery/IMG_2379.JPG'),
-    alt: 'Momen pre-wedding Arif dan Amalia',
-    caption: 'Tawa hari ini menjadi doa untuk hari-hari berikutnya.',
+    alt: 'Arif dan Amalia berlutut berbusana adat di depan payung dan bunga',
+    caption: 'Dalam kemuliaan adat, kami berjanji melangkah dengan saling menghormati.',
+  },
+  {
+    src: withBase('/images/gallery/IMG_2369.JPG'),
+    alt: 'Pasangan berbusana adat, Arif duduk dan Amalia berdiri di sampingnya',
+    caption: 'Satu irama batik, dua hati yang belajar selaras dalam doa.',
   },
   {
     src: withBase('/images/gallery/IMG_2380.JPG'),
-    alt: 'Potret kebersamaan Arif dan Amalia',
-    caption: 'Kami bersyukur dipertemukan dalam waktu terbaik-Nya.',
+    alt: 'Arif dan Amalia berlutut tersenyum memakai beskap dan kebaya',
+    caption: 'Senyum sederhana di balik rias megah—bukti bahagia yang tenang.',
   },
   {
     src: withBase('/images/gallery/IMG_2381.JPG'),
-    alt: 'Jejak pre-wedding Arif dan Amalia',
-    caption: 'Mohon doa agar perjalanan ini selalu dijaga dalam kebaikan.',
+    alt: 'Arif dan Amalia berdiri berbusana adat memegang keris',
+    caption: 'Kami mengikat niat baik di antara payung, bunga, dan warisan budaya.',
+  },
+  {
+    src: withBase('/images/gallery/IMG_2371.JPG'),
+    alt: 'Arif dan Amalia bergandengan, pose berdiri dan duduk studio adat',
+    caption: 'Genggaman erat di tengah warna cokelat dan emas—janji yang pelan tapi pasti.',
+  },
+  {
+    src: withBase('/images/gallery/IMG_2373.JPG'),
+    alt: 'Pasangan adat dengan payung kertas dan dekor bunga anggrek',
+    caption: 'Detail kecil—payung, anggrek, batik—mengisi cerita besar kami.',
+  },
+  {
+    src: withBase('/images/gallery/IMG_2386.jpg'),
+    alt: 'Arif dan Amalia duduk berdampingan di depan backdrop lamaran Amalia & Arif',
+    caption: 'Momen lamaran: ketika dua keluarga mulai merangkai restu bersama.',
+  },
+  {
+    src: withBase('/images/gallery/IMG_2426.jpg'),
+    alt: 'Amalia berdiri di belakang Arif yang duduk, backdrop bunga dan tulisan nama',
+    caption: 'Di balik setiap undangan ada tawa ringan yang membuat hari ini terasa nyata.',
+  },
+  {
+    src: withBase('/images/gallery/IMG_2578%20(1).jpg'),
+    alt: 'Arif dan Amalia tertawa bersama di depan backdrop lamaran',
+    caption: 'Tawa lepas—momen favorit kami sebelum hari besar tiba.',
+  },
+  {
+    src: withBase('/images/gallery/IMG-20251108-WA0023.jpg'),
+    alt: 'Empat anggota keluarga berpose di depan dekor lamaran',
+    caption: 'Keluarga yang mendampingi doa kami sejak awal hingga hari ini.',
+  },
+  {
+    src: withBase('/images/gallery/IMG-20251108-WA0029.jpg'),
+    alt: 'Keluarga berempat berbusana batik dan kebaya di acara lamaran',
+    caption: 'Terima kasih atas kasih sayang yang menumbuhkan keberanian kami berdua.',
   },
 ];
 
