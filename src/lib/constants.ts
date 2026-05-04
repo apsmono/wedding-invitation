@@ -82,21 +82,84 @@ export const AYAT_TRANSLATION =
 
 // --- Gallery (replace with your photos under public/images/gallery/) ---------
 
+const withBase = (path: string): string =>
+  `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`;
+
 export const galleryImages = [
   {
-    src: '/images/gallery/photo1.svg',
-    alt: 'Foto pre-wedding pasangan di lokasi outdoor',
+    src: withBase('/images/gallery/IMG_2355.JPG'),
+    alt: 'Momen pre-wedding Arif dan Amalia',
     caption: 'Perjalanan sederhana yang menjadi cerita indah menuju hari ini.',
   },
   {
-    src: '/images/gallery/photo2.svg',
-    alt: 'Momen kebersamaan pasangan sebelum hari pernikahan',
+    src: withBase('/images/gallery/IMG_2356.JPG'),
+    alt: 'Potret kebersamaan Arif dan Amalia',
     caption: 'Setiap langkah kecil kami penuh doa dan harapan yang baik.',
   },
   {
-    src: '/images/gallery/photo3.svg',
-    alt: 'Pasangan berpose untuk dokumentasi pre-wedding',
+    src: withBase('/images/gallery/IMG_2358.JPG'),
+    alt: 'Jejak pre-wedding Arif dan Amalia',
     caption: 'Ruang penuh tawa yang kini kami kenang bersama keluarga besar.',
+  },
+  {
+    src: withBase('/images/gallery/IMG_2362.JPG'),
+    alt: 'Momen pre-wedding Arif dan Amalia',
+    caption: 'Jejak cerita kami, satu langkah lebih dekat menuju hari bahagia.',
+  },
+  {
+    src: withBase('/images/gallery/IMG_2363.JPG'),
+    alt: 'Potret kebersamaan Arif dan Amalia',
+    caption: 'Kebersamaan ini tumbuh dari doa-doa yang sama.',
+  },
+  {
+    src: withBase('/images/gallery/IMG_2364.JPG'),
+    alt: 'Jejak pre-wedding Arif dan Amalia',
+    caption: 'Setiap tatap menjadi pengingat untuk saling menjaga.',
+  },
+  {
+    src: withBase('/images/gallery/IMG_2366.JPG'),
+    alt: 'Momen pre-wedding Arif dan Amalia',
+    caption: 'Cerita sederhana kami bertumbuh dengan rasa syukur.',
+  },
+  {
+    src: withBase('/images/gallery/IMG_2367.JPG'),
+    alt: 'Potret kebersamaan Arif dan Amalia',
+    caption: 'Dalam langkah ini, kami belajar saling menguatkan.',
+  },
+  {
+    src: withBase('/images/gallery/IMG_2369.JPG'),
+    alt: 'Jejak pre-wedding Arif dan Amalia',
+    caption: 'Momen kecil yang menjadi kenangan besar.',
+  },
+  {
+    src: withBase('/images/gallery/IMG_2371.JPG'),
+    alt: 'Momen pre-wedding Arif dan Amalia',
+    caption: 'Semoga perjalanan ini selalu dipenuhi keberkahan.',
+  },
+  {
+    src: withBase('/images/gallery/IMG_2373.JPG'),
+    alt: 'Potret kebersamaan Arif dan Amalia',
+    caption: 'Kami menata hari depan dengan hati yang tenang.',
+  },
+  {
+    src: withBase('/images/gallery/IMG_2375.JPG'),
+    alt: 'Jejak pre-wedding Arif dan Amalia',
+    caption: 'Langkah kami sederhana, niat kami sama: ibadah bersama.',
+  },
+  {
+    src: withBase('/images/gallery/IMG_2379.JPG'),
+    alt: 'Momen pre-wedding Arif dan Amalia',
+    caption: 'Tawa hari ini menjadi doa untuk hari-hari berikutnya.',
+  },
+  {
+    src: withBase('/images/gallery/IMG_2380.JPG'),
+    alt: 'Potret kebersamaan Arif dan Amalia',
+    caption: 'Kami bersyukur dipertemukan dalam waktu terbaik-Nya.',
+  },
+  {
+    src: withBase('/images/gallery/IMG_2381.JPG'),
+    alt: 'Jejak pre-wedding Arif dan Amalia',
+    caption: 'Mohon doa agar perjalanan ini selalu dijaga dalam kebaikan.',
   },
 ];
 

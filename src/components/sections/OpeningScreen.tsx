@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { Button } from '@/components/ui/Button';
-import { BRIDE_NAME, COVER_IMAGE_SRC, GROOM_NAME } from '@/lib/constants';
+import { BRIDE_NAME, COVER_IMAGE_SRC, GROOM_NAME, WEDDING_DATE } from '@/lib/constants';
 
 export function OpeningScreen() {
   const { guestName, openInvitation, toggleMusic } = useInvitationStore();
@@ -13,6 +13,14 @@ export function OpeningScreen() {
 
   const displayName = guestName?.trim() || 'Tamu Undangan';
   const showCover = Boolean(COVER_IMAGE_SRC.trim());
+  const openingDateLabel = new Intl.DateTimeFormat('id-ID', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  })
+    .format(WEDDING_DATE)
+    .toUpperCase()
+    .replace(/\s+/g, ' ');
 
   return (
     <motion.div
@@ -80,13 +88,28 @@ export function OpeningScreen() {
           Undangan Pernikahan
         </motion.p>
 
+        <motion.div
+          className="mx-auto mb-4 flex w-full max-w-[19rem] items-center justify-center gap-2.5 px-2 text-brown-500 sm:max-w-[24rem] sm:gap-3"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.55 }}
+        >
+          <span className="h-px flex-1 bg-brown-500/35" />
+          <p className="whitespace-nowrap text-[0.72rem] font-medium uppercase tracking-[0.2em] leading-none sm:text-[0.8rem] sm:tracking-[0.24em]">
+            {openingDateLabel} • INSYAALLAH
+          </p>
+          <span className="h-px flex-1 bg-brown-500/35" />
+        </motion.div>
+
         <motion.h1
-          className="font-serif text-[clamp(2.2rem,5.5vw,3.75rem)] text-green-800 mb-8"
+          className="mb-8 flex flex-col items-center gap-1.5 font-serif text-green-800 sm:gap-2"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
         >
-          {GROOM_NAME} <span className="italic font-medium text-bronze-500">&amp;</span> {BRIDE_NAME}
+          <span className="text-[clamp(2.35rem,9.2vw,4.7rem)] leading-[0.9] tracking-[0.01em]">{GROOM_NAME}</span>
+          <span className="text-[clamp(1.05rem,3.9vw,1.5rem)] italic leading-none text-bronze-500/90">&amp;</span>
+          <span className="text-[clamp(2.35rem,9.2vw,4.7rem)] leading-[0.9] tracking-[0.01em]">{BRIDE_NAME}</span>
         </motion.h1>
 
         <motion.div
