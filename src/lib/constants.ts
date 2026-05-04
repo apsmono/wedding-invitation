@@ -46,24 +46,29 @@ export const WHATSAPP_RSVP_E164 = '6280000000000';
 
 // --- Venues (replace addresses and map links with yours) --------------------
 
+/** Shared venue address + maps (akad & resepsi same location). Coords from Google Maps place link. */
+const VENUE_ADDRESS_LINE =
+  'Pohgunung, RT.36 RW.09, Margourip, Ngancar, Kediri';
+const VENUE_DIRECTIONS_URL = 'https://www.google.com/maps/place/-7.9662645,112.176766';
+const VENUE_EMBED_URL =
+  'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3959.8!2d112.176766!3d-7.966265!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sPohgunung%2C+Margourip%2C+Ngancar%2C+Kediri!5e0!3m2!1sid!2sid!4v1';
+
 export const VENUE_AKAD = {
   title: 'Akad Nikah',
   scheduleLabel: '08.00 WIB – Selesai',
-  addressLine: '[ALAMAT LENGKAP AKAD + LINK MAPS]',
+  addressLine: VENUE_ADDRESS_LINE,
   /** Opens in new tab for "Petunjuk Lokasi" */
-  directionsUrl: 'https://www.google.com/maps/search/?api=1&query=Monumen+Nasional',
+  directionsUrl: VENUE_DIRECTIONS_URL,
   /** Paste embed URL from Google Maps → Share → Embed a map */
-  embedUrl:
-    'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.7980598473668!2d106.827153!3d-6.175392!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f5e2c12617c7%3A0x16cb25091ae78032!2sMonumen%20Nasional!5e0!3m2!1sid!2sid!4v1',
+  embedUrl: VENUE_EMBED_URL,
 };
 
 export const VENUE_RESEPSI = {
   title: 'Resepsi',
   scheduleLabel: '11.00 – 14.00 WIB',
-  addressLine: '[ALAMAT LENGKAP RESEPSI + LINK MAPS]',
-  directionsUrl: 'https://www.google.com/maps/search/?api=1&query=Monumen+Nasional',
-  embedUrl:
-    'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.7980598473668!2d106.827153!3d-6.175392!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f5e2c12617c7%3A0x16cb25091ae78032!2sMonumen%20Nasional!5e0!3m2!1sid!2sid!4v1',
+  addressLine: VENUE_ADDRESS_LINE,
+  directionsUrl: VENUE_DIRECTIONS_URL,
+  embedUrl: VENUE_EMBED_URL,
 };
 
 // --- Digital gifts ------------------------------------------------------------
