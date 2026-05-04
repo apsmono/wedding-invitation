@@ -22,27 +22,52 @@ export function OpeningScreen() {
     .toUpperCase()
     .replace(/\s+/g, ' ');
 
+  const patternBg =
+    'linear-gradient(130deg, rgba(255,255,255,0.12), transparent 30%), repeating-linear-gradient(45deg, transparent 0, transparent 26px, rgba(98,71,44,0.03) 26px, rgba(98,71,44,0.03) 28px), repeating-linear-gradient(90deg, transparent 0, transparent 38px, rgba(122,95,70,0.03) 38px, rgba(122,95,70,0.03) 39px)';
+
+  const fallbackPageBg =
+    'radial-gradient(circle at top left, rgba(255,255,255,0.58), transparent 35%), radial-gradient(circle at 82% 10%, rgba(160,119,62,0.24), transparent 24%), radial-gradient(circle at 18% 88%, rgba(46,82,59,0.14), transparent 24%), linear-gradient(180deg, #f8f0e3 0%, #efe2cc 46%, #dcc6a4 100%)';
+
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center px-6"
-      style={{
-        background:
-          'radial-gradient(circle at top left, rgba(255,255,255,0.58), transparent 35%), radial-gradient(circle at 82% 10%, rgba(160,119,62,0.24), transparent 24%), radial-gradient(circle at 18% 88%, rgba(46,82,59,0.14), transparent 24%), linear-gradient(180deg, #f8f0e3 0%, #efe2cc 46%, #dcc6a4 100%)',
-      }}
+      className={`fixed inset-0 z-50 flex flex-col items-center justify-center px-6 ${showCover ? 'bg-[#e5dcc8]' : ''}`}
+      style={showCover ? undefined : { background: fallbackPageBg }}
       initial={{ opacity: 1 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.8, ease: 'easeInOut' }}
     >
+      {showCover && (
+        <div className="fixed inset-0 z-0 overflow-hidden" aria-hidden>
+          <img
+            src={COVER_IMAGE_SRC}
+            alt=""
+            width={1600}
+            height={2133}
+            className="h-full min-h-[100dvh] w-full scale-[1.02] object-cover object-[50%_26%] min-[480px]:object-[50%_22%]"
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              background: [
+                'linear-gradient(180deg, rgba(248,240,227,0.62) 0%, rgba(248,240,227,0.12) 32%, transparent 55%)',
+                'linear-gradient(0deg, rgba(248,240,227,0.99) 0%, rgba(248,240,227,0.82) 14%, rgba(55,42,30,0.18) 40%, transparent 58%)',
+                'radial-gradient(ellipse 130% 80% at 50% 30%, transparent 0%, rgba(22,18,14,0.28) 100%)',
+              ].join(','),
+            }}
+          />
+        </div>
+      )}
+
       <div
-        className="fixed inset-0 pointer-events-none z-0"
-        style={{
-          background:
-            'linear-gradient(130deg, rgba(255,255,255,0.12), transparent 30%), repeating-linear-gradient(45deg, transparent 0, transparent 26px, rgba(98,71,44,0.03) 26px, rgba(98,71,44,0.03) 28px), repeating-linear-gradient(90deg, transparent 0, transparent 38px, rgba(122,95,70,0.03) 38px, rgba(122,95,70,0.03) 39px)',
-        }}
+        className={`fixed inset-0 pointer-events-none z-[1] ${showCover ? 'opacity-40' : ''}`}
+        style={{ background: patternBg }}
       />
 
       <motion.div
-        className="relative z-10 text-center max-w-md"
+        className="relative z-10 text-center max-w-md drop-shadow-[0_1px_14px_rgba(248,240,227,0.55)]"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.2 }}
@@ -59,25 +84,6 @@ export function OpeningScreen() {
             <circle cx="100" cy="22" r="2" fill="currentColor" opacity="0.3"/>
           </svg>
         </motion.div>
-
-        {showCover && (
-          <motion.div
-            className="mx-auto mb-8 max-h-[min(42vh,280px)] w-full max-w-[280px] overflow-hidden rounded-[28px] shadow-soft border border-[rgba(120,86,55,0.14)]"
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.35 }}
-          >
-            <img
-              src={COVER_IMAGE_SRC}
-              alt={`Foto sampul undangan pernikahan ${GROOM_NAME} dan ${BRIDE_NAME}`}
-              width={560}
-              height={700}
-              className="h-full w-full object-cover"
-              loading="eager"
-              decoding="async"
-            />
-          </motion.div>
-        )}
 
         <motion.p
           className="uppercase tracking-[0.22em] text-[0.74rem] text-brown-400 mb-3"

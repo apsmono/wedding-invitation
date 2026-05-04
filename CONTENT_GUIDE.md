@@ -17,10 +17,11 @@ Judul HTML dan meta Open Graph ada di `index.html` — **sesuaikan juga** jika m
 
 ## Foto sampul
 
-- `COVER_IMAGE_SRC` — path ke file di folder `public/`, contoh `/images/cover.jpg` (hanya di **halaman sampul** sebelum *Buka Undangan*; bagian beranda setelahnya memakai tipografi tanpa duplikasi foto agar LCP tetap ringan).
+- `COVER_IMAGE_SRC` — URL ke file di `public/`. Di `src/lib/constants.ts` pakai pola yang sama seperti galeri: `withBase('/images/...')` agar cocok dengan `base` Vite (GitHub Pages). Foto dipakai sebagai **latar penuh** halaman sampul, dengan gradien agar teks tetap terbaca.
+- Hanya di **halaman sampul** sebelum *Buka Undangan*; isi beranda setelah dibuka tetap tipografi saja (tanpa foto ganda).
 - Kosongkan (`''`) untuk hanya memakai latar gradien.
 
-Rekomendasi: rasio potret, kompres WebP/JPG, lebar 1200–1600px.
+Rekomendasi: foto potret oke; untuk crop horizontal halaman memakai `object-cover` + posisi tengah-atas. Kompres WebP/JPG, lebar 1200–1600px cukup untuk web.
 
 ## Akad & resepsi
 

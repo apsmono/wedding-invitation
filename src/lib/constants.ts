@@ -1,6 +1,10 @@
 import type { RsvpFormData } from '@/types';
 import { formatDateId } from '@/lib/utils';
 
+/** Vite `base`-aware URL for files under `public/` */
+const withBase = (path: string): string =>
+  `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`;
+
 // =============================================================================
 // Wedding content — replace placeholders before sending invites (CONTENT_GUIDE.md)
 // =============================================================================
@@ -10,6 +14,10 @@ export const GROOM_NAME = 'Arif Eko Pramono';
 
 /** Bride first name or full name as shown on the invitation */
 export const BRIDE_NAME = 'Amalia Indah Palupi';
+
+/** Short names used in compact UI areas (e.g. header / sticky navbar) */
+export const GROOM_NICKNAME = 'Arif';
+export const BRIDE_NICKNAME = 'Amal';
 
 /** Wedding date as ISO date only; time is applied with Asia/Jakarta below */
 export const WEDDING_DATE_ISO = '2026-06-01';
@@ -27,10 +35,10 @@ export const WEDDING_DATE = new Date(`${WEDDING_DATE_ISO}T08:00:00+07:00`);
 export const WEDDING_DATE_LABEL_LONG = `${formatDateId(WEDDING_DATE)} · InsyaAllah`;
 
 /**
- * Optional cover / hero image on opening screen and beranda (empty = gradient only).
- * Place file under `public/` e.g. `/images/cover.jpg`
+ * Foto sampul: latar penuh halaman buka undangan (empty = hanya gradien).
+ * File di `public/`, contoh `withBase('/images/gallery/foto.jpg')`
  */
-export const COVER_IMAGE_SRC = '';
+export const COVER_IMAGE_SRC = withBase('/images/gallery/-xdunqp.jpg');
 
 // --- WhatsApp RSVP (E.164 without +, e.g. 6281234567890) --------------------
 
@@ -81,9 +89,6 @@ export const AYAT_TRANSLATION =
   'Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang. Sungguh, pada yang demikian itu benar-benar terdapat tanda-tanda (kebesaran Allah) bagi kaum yang berpikir. (QS. Ar-Rum: 21)';
 
 // --- Gallery (replace with your photos under public/images/gallery/) ---------
-
-const withBase = (path: string): string =>
-  `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`;
 
 export const galleryImages = [
   {
