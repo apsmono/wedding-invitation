@@ -49,25 +49,22 @@ export function OpeningScreen() {
             fetchPriority="high"
           />
           <div
-            className="absolute inset-0"
-            style={{
-              background: [
-                'linear-gradient(180deg, rgba(248,240,227,0.62) 0%, rgba(248,240,227,0.12) 32%, transparent 55%)',
-                'linear-gradient(0deg, rgba(248,240,227,0.99) 0%, rgba(248,240,227,0.82) 14%, rgba(55,42,30,0.18) 40%, transparent 58%)',
-                'radial-gradient(ellipse 130% 80% at 50% 30%, transparent 0%, rgba(22,18,14,0.28) 100%)',
-              ].join(','),
-            }}
+            className="absolute inset-0 bg-[linear-gradient(180deg,rgba(12,10,8,0.55)_0%,transparent_42%),linear-gradient(0deg,rgba(248,240,227,0.55)_0%,transparent_38%),radial-gradient(ellipse_95%_65%_at_50%_35%,transparent_0%,rgba(10,8,6,0.22)_100%)]"
           />
         </div>
       )}
 
       <div
-        className={`fixed inset-0 pointer-events-none z-[1] ${showCover ? 'opacity-40' : ''}`}
+        className={`fixed inset-0 pointer-events-none z-[1] ${showCover ? 'opacity-[0.22]' : ''}`}
         style={{ background: patternBg }}
       />
 
       <motion.div
-        className="relative z-10 text-center max-w-md drop-shadow-[0_1px_14px_rgba(248,240,227,0.55)]"
+        className={`relative z-10 mx-auto w-full text-center max-w-md ${
+          showCover
+            ? 'rounded-[28px] border border-white/55 bg-[rgba(255,251,244,0.94)] px-5 py-9 shadow-[0_16px_56px_rgba(18,14,10,0.35)] backdrop-blur-md sm:px-8 sm:py-10'
+            : ''
+        }`}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.2 }}
@@ -86,7 +83,7 @@ export function OpeningScreen() {
         </motion.div>
 
         <motion.p
-          className="uppercase tracking-[0.22em] text-[0.74rem] text-brown-400 mb-3"
+          className={`uppercase tracking-[0.22em] text-[0.74rem] mb-3 ${showCover ? 'text-brown-600' : 'text-brown-400'}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
@@ -95,20 +92,20 @@ export function OpeningScreen() {
         </motion.p>
 
         <motion.div
-          className="mx-auto mb-4 flex w-full max-w-[19rem] items-center justify-center gap-2.5 px-2 text-brown-500 sm:max-w-[24rem] sm:gap-3"
+          className={`mx-auto mb-4 flex w-full max-w-[19rem] items-center justify-center gap-2.5 px-2 sm:max-w-[24rem] sm:gap-3 ${showCover ? 'text-brown-600' : 'text-brown-500'}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.55 }}
         >
-          <span className="h-px flex-1 bg-brown-500/35" />
+          <span className={`h-px flex-1 ${showCover ? 'bg-brown-600/30' : 'bg-brown-500/35'}`} />
           <p className="whitespace-nowrap text-[0.72rem] font-medium uppercase tracking-[0.2em] leading-none sm:text-[0.8rem] sm:tracking-[0.24em]">
             {openingDateLabel} • INSYAALLAH
           </p>
-          <span className="h-px flex-1 bg-brown-500/35" />
+          <span className={`h-px flex-1 ${showCover ? 'bg-brown-600/30' : 'bg-brown-500/35'}`} />
         </motion.div>
 
         <motion.h1
-          className="mb-8 flex flex-col items-center gap-1.5 font-serif text-green-800 sm:gap-2"
+          className={`mb-8 flex flex-col items-center gap-1.5 font-serif sm:gap-2 ${showCover ? 'text-[#142920]' : 'text-green-800'}`}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
@@ -124,9 +121,12 @@ export function OpeningScreen() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8 }}
         >
-          <p className="text-[0.85rem] text-brown-400 mb-2">Kepada Yth.</p>
-          <p className="text-[0.85rem] text-brown-400 mb-3">Bapak/Ibu/Saudara/i</p>
-          <p className="font-serif text-[1.5rem] text-green-800 font-semibold" aria-live="polite">
+          <p className={`text-[0.85rem] mb-2 ${showCover ? 'text-brown-600' : 'text-brown-400'}`}>Kepada Yth.</p>
+          <p className={`text-[0.85rem] mb-3 ${showCover ? 'text-brown-600' : 'text-brown-400'}`}>Bapak/Ibu/Saudara/i</p>
+          <p
+            className={`font-serif text-[1.5rem] font-semibold ${showCover ? 'text-[#0f1f18]' : 'text-green-800'}`}
+            aria-live="polite"
+          >
             {displayName}
           </p>
         </motion.div>
